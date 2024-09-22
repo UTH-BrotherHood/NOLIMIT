@@ -17,8 +17,10 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
   const form = useForm<SignUpBodyType>({
     resolver: zodResolver(SignUpBody),
     defaultValues: {
+      name: '',
       email: '',
-      password: ''
+      password: '',
+      confirm_password: ''
     }
   })
 
