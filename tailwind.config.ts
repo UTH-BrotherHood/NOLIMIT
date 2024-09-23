@@ -56,9 +56,61 @@ const config: Config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)'
+      },
+      scrollbar: {
+        DEFAULT: {
+          '&::-webkit-scrollbar': {
+            width: '0.5rem' // tương đương w-2 (0.5rem)
+          },
+          '&::-webkit-scrollbar-track': {
+            borderRadius: '9999px', // tương đương rounded-full
+            backgroundColor: '#f3f4f6' // tương đương bg-gray-100
+          },
+          '&::-webkit-scrollbar-thumb': {
+            borderRadius: '9999px', // tương đương rounded-full
+            backgroundColor: '#374151' // tương đương bg-gray-700
+          }
+        },
+        dark: {
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: '#374151' // tương đương bg-neutral-700
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#6b7280' // tương đương bg-neutral-500
+          }
+        }
       }
     }
   },
-  plugins: [require('tailwindcss-animate')]
+  plugins: [
+    require('tailwindcss-animate'),
+    function ({ addUtilities }: { addUtilities: (utilities: Record<string, any>, variants?: string[]) => void }) {
+      const scrollbarUtilities = {
+        '.scrollbar-default': {
+          '&::-webkit-scrollbar': {
+            width: '0.5rem'
+          },
+          '&::-webkit-scrollbar-track': {
+            borderRadius: '9999px',
+            backgroundColor: '#f3f4f6'
+          },
+          '&::-webkit-scrollbar-thumb': {
+            borderRadius: '9999px',
+            backgroundColor: '#374151'
+          }
+        },
+        '.scrollbar-dark': {
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: '#374151'
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#6b7280'
+          }
+        }
+      }
+
+      addUtilities(scrollbarUtilities, ['dark'])
+    }
+  ]
 }
 export default config
