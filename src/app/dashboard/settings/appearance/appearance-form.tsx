@@ -10,6 +10,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { toast } from '@/hooks/use-toast'
 import { useTheme } from 'next-themes'
 import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
@@ -21,6 +22,7 @@ type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
 
 export function AppearanceForm() {
   const { theme, setTheme } = useTheme()
+  const router = useRouter()
 
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
@@ -42,6 +44,7 @@ export function AppearanceForm() {
       title: 'Theme updated',
       description: `Theme has been set to ${data.theme}`
     })
+    router.refresh()
   }
 
   return (
