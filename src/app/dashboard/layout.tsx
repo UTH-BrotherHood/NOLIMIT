@@ -3,7 +3,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div
       className={
-        'flex flex-col h-screen w-full md:flex-row bg-red-500 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 overflow-hidden'
+        'flex flex-col h-screen w-full md:flex-row  dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 overflow-hidden'
       }
     >
       <SidebarDashboard />
