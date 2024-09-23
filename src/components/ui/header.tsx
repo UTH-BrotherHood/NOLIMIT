@@ -128,9 +128,11 @@ export function Header() {
               </a>
 
               <div className='hidden sm:flex'>
-                <Button size='lg' className='bg-black text-white font-semibold'>
-                  Try It Now
-                </Button>
+                <Link href={'/dashboard'}>
+                  <Button size='lg' className='bg-black text-white font-semibold'>
+                    Try It Now
+                  </Button>
+                </Link>
               </div>
             </div>
 

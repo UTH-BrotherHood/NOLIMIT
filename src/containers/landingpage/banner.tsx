@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 import { ReactTyped } from 'react-typed'
 
 export default function Banner() {
@@ -15,9 +15,9 @@ export default function Banner() {
         strings={['Plan, schedule, and track your projects in one place']}
         typeSpeed={40}
       />
-      <Button size='lg' className='font-semibold'>
+      <Link href={'/dashboard'} className='font-semibold py-2 px-8 rounded-lg text-white bg-primary hover:opacity-80'>
         Try It Now
-      </Button>
+      </Link>
     </div>
   )
 }

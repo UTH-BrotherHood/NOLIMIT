@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+const { fontFamily } = require('tailwindcss/defaultTheme')
 
 const config: Config = {
   darkMode: ['class'],
@@ -10,6 +11,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-sans)', ...fontFamily.sans]
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
@@ -79,6 +83,10 @@ const config: Config = {
             backgroundColor: '#6b7280' // tương đương bg-neutral-500
           }
         }
+      },
+      backgroundColor: {
+        darkPrimaryBg: '#121212',
+        darkSecondaryBg: '#111C44'
       }
     }
   },

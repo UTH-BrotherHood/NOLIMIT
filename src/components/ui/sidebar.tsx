@@ -80,7 +80,7 @@ export const DesktopSidebar = ({ className, children, ...props }: React.Componen
     <>
       <motion.div
         className={cn(
-          'h-full px-4 py-4 hidden md:flex md:flex-col bg-neutral-100 w-[65px] dark:bg-neutral-800 flex-shrink-0',
+          'h-full  py-4 hidden md:flex md:flex-col md:items-center bg-neutral-100 w-[60px] dark:bg-neutral-800 flex-shrink-0',
           className
         )}
         // onMouseEnter={() => setOpen(true)}
@@ -147,7 +147,7 @@ export const SidebarLink = ({ link, className, ...props }: { link: Links; classN
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className=''>{link.icon}</div>
+            <div className='p-2 hover:bg-slate-200 dark:hover:bg-neutral-500 rounded-lg'>{link.icon}</div>
           </TooltipTrigger>
           <TooltipContent>
             <p>{link.label}</p>
@@ -155,15 +155,17 @@ export const SidebarLink = ({ link, className, ...props }: { link: Links; classN
         </Tooltip>
       </TooltipProvider>
 
-      <motion.span
-        animate={{
-          display: animate ? (open ? 'inline-block' : 'none') : 'inline-block',
-          opacity: animate ? (open ? 1 : 0) : 1
-        }}
-        className='text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0'
-      >
-        {link.label}
-      </motion.span>
+      {open && (
+        <motion.span
+          animate={{
+            display: animate ? (open ? 'inline-block' : 'none') : 'inline-block',
+            opacity: animate ? (open ? 1 : 0) : 1
+          }}
+          className='text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0'
+        >
+          {link.label}
+        </motion.span>
+      )}
     </Link>
   )
 }

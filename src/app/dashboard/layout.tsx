@@ -1,13 +1,12 @@
 import SidebarDashboard from '@/app/dashboard/sidebar-dashboard'
+import { ThemeProvider } from '@/components/theme-provider'
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      className={
-        'flex flex-col h-screen w-full md:flex-row  dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 overflow-hidden'
-      }
-    >
-      <SidebarDashboard />
-      <div className='w-full overflow-y-auto scrollbar-default dark:scrollbar-dark'>{children}</div>
+    <div className={'flex flex-col h-screen w-full md:flex-row dark:bg-[#171717] overflow-hidden'}>
+      <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
+        <SidebarDashboard />
+        <div className='w-full overflow-y-auto scrollbar-default '>{children}</div>
+      </ThemeProvider>
     </div>
   )
 }
