@@ -5,9 +5,11 @@ import NextTopLoader from 'nextjs-toploader'
 
 export default function TopLoader() {
   const theme = localStorage.getItem('theme')
+
   if (!theme) {
     localStorage.setItem('theme', 'light')
   }
+
   const isDarkMode = theme === 'dark'
   console.log(theme)
 

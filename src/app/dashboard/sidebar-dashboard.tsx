@@ -17,27 +17,27 @@ export default function SidebarDashboard() {
     {
       label: 'Dashboard',
       href: '/dashboard',
-      icon: <IconLayoutDashboard className='text-neutral-700 dark:text-neutral-200 h-6 w-6 flex-shrink-0' />
+      icon: <IconLayoutDashboard className='h-6 w-6 flex-shrink-0' />
     },
     {
       label: 'Projects',
       href: '/dashboard/projects',
-      icon: <IconFolderOpen className='text-neutral-700 dark:text-neutral-200 h-6 w-6 flex-shrink-0' />
+      icon: <IconFolderOpen className='h-6 w-6 flex-shrink-0' />
     },
     {
       label: 'Schedule',
       href: '/dashboard/schedule',
-      icon: <IconCalendarTime className='text-neutral-700 dark:text-neutral-200 h-6 w-6 flex-shrink-0' />
+      icon: <IconCalendarTime className='h-6 w-6 flex-shrink-0' />
     },
     {
       label: 'Message',
       href: '/dashboard/message',
-      icon: <IconBrandTelegram className='text-neutral-700 dark:text-neutral-200 h-6 w-6 flex-shrink-0' />
+      icon: <IconBrandTelegram className='h-6 w-6 flex-shrink-0' />
     },
     {
       label: 'Settings',
       href: '/dashboard/settings',
-      icon: <IconSettings className='text-neutral-700 dark:text-neutral-200 h-6 w-6 flex-shrink-0' />
+      icon: <IconSettings className='h-6 w-6 flex-shrink-0' />
     }
   ]
   const [open, setOpen] = useState(false)

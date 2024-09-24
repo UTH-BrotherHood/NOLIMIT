@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { IconMenu2, IconX } from '@tabler/icons-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Button } from '@/components/ui/button'
+import { usePathname } from 'next/navigation'
 
 interface Links {
   label: string
@@ -138,6 +139,8 @@ export const MobileSidebar = ({ className, children, ...props }: React.Component
 
 export const SidebarLink = ({ link, className, ...props }: { link: Links; className?: string; props?: LinkProps }) => {
   const { open, animate } = useSidebar()
+  const pathname = usePathname()
+  const isActive = pathname === link.href
   return (
     <Link
       href={link.href}
@@ -147,7 +150,15 @@ export const SidebarLink = ({ link, className, ...props }: { link: Links; classN
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className='p-2 hover:bg-slate-200 dark:hover:bg-neutral-500 rounded-lg'>{link.icon}</div>
+            <div
+              className={`p-2 rounded-lg ${
+                isActive
+                  ? 'bg-black text-white dark:bg-white dark:text-gray-600'
+                  : 'hover:bg-slate-200 dark:hover:bg-neutral-500'
+              }`}
+            >
+              {link.icon}
+            </div>
           </TooltipTrigger>
           <TooltipContent>
             <p>{link.label}</p>
