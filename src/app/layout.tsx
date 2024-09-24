@@ -33,7 +33,8 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
         <TopLoader />
-        {children}
+        <div className='lg:hidden'>Mobile is not valiable</div>
+        <div className='hidden lg:block'>{children}</div>
         <Toaster />
       </body>
     </html>
