@@ -4,6 +4,7 @@ import './globals.css'
 import { Header } from '@/components/ui/header'
 import { Toaster } from '@/components/ui/toaster'
 import TopLoader from '@/components/top-loader'
+import { Badge } from '@/components/ui/badge'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -33,7 +34,9 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
         <TopLoader />
-        <div className='lg:hidden'>Mobile is not valiable</div>
+        <div className='lg:hidden flex items-center justify-center h-screen'>
+          <Badge>Mobile is not valiable</Badge>
+        </div>
         <div className='hidden lg:block'>{children}</div>
         <Toaster />
       </body>
