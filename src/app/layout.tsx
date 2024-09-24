@@ -34,10 +34,7 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
         <TopLoader />
-        <div className='lg:hidden flex items-center justify-center h-screen'>
-          <Badge>Mobile is not valiable</Badge>
-        </div>
-        <div className='hidden lg:block'>{children}</div>
+        {children}
         <Toaster />
       </body>
     </html>
