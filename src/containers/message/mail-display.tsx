@@ -4,13 +4,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { Label } from '@/components/ui/label'
 import { Calendar } from '@/components/ui/calendar'
 import { Separator } from '@/components/ui/separator'
-import { Switch } from '@/components/ui/switch'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Textarea } from '@/components/ui/textarea'
 import { Mail } from '@/app/dashboard/message/data'
+import MessageTypingForm from '@/containers/message/message-typing-form'
 
 interface MailDisplayProps {
   mail: Mail | null
@@ -26,7 +24,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant='ghost' size='icon' disabled={!mail}>
-                <Archive className='h-4 w-4' />
+                <Archive className='h-6 w-6' />
                 <span className='sr-only'>Archive</span>
               </Button>
             </TooltipTrigger>
@@ -35,7 +33,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant='ghost' size='icon' disabled={!mail}>
-                <ArchiveX className='h-4 w-4' />
+                <ArchiveX className='h-6 w-6' />
                 <span className='sr-only'>Move to junk</span>
               </Button>
             </TooltipTrigger>
@@ -44,7 +42,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant='ghost' size='icon' disabled={!mail}>
-                <Trash2 className='h-4 w-4' />
+                <Trash2 className='h-6 w-6' />
                 <span className='sr-only'>Move to trash</span>
               </Button>
             </TooltipTrigger>
@@ -56,7 +54,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
               <PopoverTrigger asChild>
                 <TooltipTrigger asChild>
                   <Button variant='ghost' size='icon' disabled={!mail}>
-                    <Clock className='h-4 w-4' />
+                    <Clock className='h-6 w-6' />
                     <span className='sr-only'>Snooze</span>
                   </Button>
                 </TooltipTrigger>
@@ -95,7 +93,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant='ghost' size='icon' disabled={!mail}>
-                <Reply className='h-4 w-4' />
+                <Reply className='h-6 w-6' />
                 <span className='sr-only'>Reply</span>
               </Button>
             </TooltipTrigger>
@@ -104,7 +102,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant='ghost' size='icon' disabled={!mail}>
-                <ReplyAll className='h-4 w-4' />
+                <ReplyAll className='h-6 w-6' />
                 <span className='sr-only'>Reply all</span>
               </Button>
             </TooltipTrigger>
@@ -113,7 +111,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant='ghost' size='icon' disabled={!mail}>
-                <Forward className='h-4 w-4' />
+                <Forward className='h-6 w-6' />
                 <span className='sr-only'>Forward</span>
               </Button>
             </TooltipTrigger>
@@ -124,7 +122,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='ghost' size='icon' disabled={!mail}>
-              <MoreVertical className='h-4 w-4' />
+              <MoreVertical className='h-6 w-6' />
               <span className='sr-only'>More</span>
             </Button>
           </DropdownMenuTrigger>
@@ -165,20 +163,8 @@ export function MailDisplay({ mail }: MailDisplayProps) {
           <Separator />
           <div className='flex-1 whitespace-pre-wrap p-4 text-sm'>{mail.text}</div>
           <Separator className='mt-auto' />
-          <div className='p-4'>
-            <form>
-              <div className='grid gap-4'>
-                <Textarea className='p-4' placeholder={`Reply ${mail.name}...`} />
-                <div className='flex items-center'>
-                  <Label htmlFor='mute' className='flex items-center gap-2 text-xs font-normal'>
-                    <Switch id='mute' aria-label='Mute thread' /> Mute this thread
-                  </Label>
-                  <Button onClick={(e: any) => e.preventDefault()} size='sm' className='ml-auto'>
-                    Send
-                  </Button>
-                </div>
-              </div>
-            </form>
+          <div className='py-4'>
+            <MessageTypingForm />
           </div>
         </div>
       ) : (

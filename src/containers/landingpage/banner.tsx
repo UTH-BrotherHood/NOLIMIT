@@ -7,7 +7,7 @@ import Balancer from 'react-wrap-balancer'
 
 export default function Banner() {
   return (
-    <div className='flex flex-col justify-center items-center pt-32 gap-4 '>
+    <div className='flex flex-col justify-center items-center pt-32 gap-4 select-none'>
       <h1 className='text-4xl md:text-4xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center mt-6'>
         <Balancer>
           The resource management platform to plan your{' '}
