@@ -87,6 +87,9 @@ const config: Config = {
       backgroundColor: {
         darkPrimaryBg: '#121212',
         darkSecondaryBg: '#111C44'
+      },
+      backgroundImage: {
+        gradient: 'linear-gradient(108deg, rgba(8,148,255,1) 0%, rgba(255,46,84,1) 70%, rgba(255,144,4,1) 100%)'
       }
     }
   },
@@ -96,14 +99,14 @@ const config: Config = {
       const scrollbarUtilities = {
         '.scrollbar-default': {
           '&::-webkit-scrollbar': {
-            width: '0.5rem'
+            width: '0.3rem'
           },
           '&::-webkit-scrollbar-track': {
-            borderRadius: '9999px',
+            // borderRadius: '9999px',
             backgroundColor: '#f3f4f6'
           },
           '&::-webkit-scrollbar-thumb': {
-            borderRadius: '9999px',
+            borderRadius: '0.25rem',
             backgroundColor: '#374151'
           }
         },
@@ -112,7 +115,7 @@ const config: Config = {
             backgroundColor: '#374151'
           },
           '&::-webkit-scrollbar-thumb': {
-            backgroundColor: '#6b7280'
+            backgroundColor: '#f3f4f6'
           }
         }
       }

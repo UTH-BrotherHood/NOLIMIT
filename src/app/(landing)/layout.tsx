@@ -4,11 +4,11 @@ import React from 'react'
 
 export default function HomeLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
-      <ThemeProvider attribute='class' defaultTheme='light' forcedTheme='light'>
+    <ThemeProvider attribute='class' defaultTheme='light' forcedTheme='light'>
+      <div className='no-scrollbar'>
         <Header />
         {children}
-      </ThemeProvider>
-    </div>
+      </div>
+    </ThemeProvider>
   )
 }
