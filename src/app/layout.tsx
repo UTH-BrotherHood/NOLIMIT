@@ -3,7 +3,7 @@ import localFont from 'next/font/local'
 import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import TopLoader from '@/components/top-loader'
-import { ThemeProvider } from '@/components/theme-provider'
+import { Provider } from 'react-wrap-balancer'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -31,10 +31,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased  `}>
-        <TopLoader />
-        {children}
-        <Toaster />
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-y-auto scrollbar-default  dark:scrollbar-dark `}
+      >
+        <Provider>
+          <TopLoader />
+          {children}
+          <Toaster />
+        </Provider>
       </body>
     </html>
   )
