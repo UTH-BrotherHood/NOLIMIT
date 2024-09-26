@@ -66,7 +66,35 @@ export function MailDisplay({ mail }: MailDisplayProps) {
             )} */}
           </div>
           <Separator />
-          <div className='flex-1 whitespace-pre-wrap p-4 text-sm'>{mail.text}</div>
+          {/* <div className='flex-1 whitespace-pre-wrap p-4 text-sm'>{mail.text}</div> */}
+          <div className='flex flex-col gap-4 p-4'>
+            <div className='flex items-start gap-4 w-[45%]'>
+              <Avatar>
+                <AvatarImage alt={mail.name} />
+                <AvatarFallback>
+                  {mail.name
+                    .split(' ')
+                    .map((chunk: any) => chunk[0])
+                    .join('')}
+                </AvatarFallback>
+              </Avatar>
+              <div className='flex-1 p-2 bg-gray-100 rounded-lg'>
+                <div className='text-sm'>{mail.text}</div>
+              </div>
+            </div>
+            <div className='flex items-start gap-4 self-end  w-[45%] '>
+              <div className='flex-1 p-2 bg-blue-100 rounded-lg'>
+                <div className='text-sm'>
+                  Thanks for reaching out! I’ll be ready for tomorrow’s meeting and will come prepared with any
+                  questions. Looking forward to hearing your ideas and discussing the next steps!
+                </div>
+              </div>
+              <Avatar>
+                <AvatarImage alt='You' />
+                <AvatarFallback>V</AvatarFallback>
+              </Avatar>
+            </div>
+          </div>
           <Separator className='mt-auto' />
           <div className='py-4'>
             <MessageTypingForm />

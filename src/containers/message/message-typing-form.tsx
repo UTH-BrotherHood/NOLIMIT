@@ -104,7 +104,7 @@ export default function MessageTypingForm() {
             </Tooltip>
           </div>
           {showEmojiPicker && (
-            <div ref={emojiPickerRef} className='absolute -top-[30rem] left-44 z-10'>
+            <div ref={emojiPickerRef} className='absolute -top-[30rem] left-48 z-10'>
               <EmojiPicker
                 skinTonesDisabled
                 allowExpandReactions={false}
