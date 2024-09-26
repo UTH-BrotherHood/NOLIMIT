@@ -1,4 +1,5 @@
 import { ThemeProvider } from '@/components/theme-provider'
+import Footer from '@/components/ui/footer'
 import { Header } from '@/components/ui/header'
 import React from 'react'
 
@@ -8,6 +9,7 @@ export default function HomeLayout({ children }: { children: React.ReactNode }) 
       <div className='no-scrollbar'>
         <Header />
         {children}
+        <Footer />
       </div>
     </ThemeProvider>
   )

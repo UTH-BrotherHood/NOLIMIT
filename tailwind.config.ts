@@ -4,6 +4,7 @@ const { fontFamily } = require('tailwindcss/defaultTheme')
 const config: Config = {
   darkMode: ['class'],
   content: [
+    './public/**/*.{js,ts,jsx,tsx,mdx}',
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
@@ -64,23 +65,23 @@ const config: Config = {
       scrollbar: {
         DEFAULT: {
           '&::-webkit-scrollbar': {
-            width: '0.5rem' // tương đương w-2 (0.5rem)
+            width: '0.5rem'
           },
           '&::-webkit-scrollbar-track': {
-            borderRadius: '9999px', // tương đương rounded-full
-            backgroundColor: '#f3f4f6' // tương đương bg-gray-100
+            borderRadius: '9999px',
+            backgroundColor: '#f3f4f6'
           },
           '&::-webkit-scrollbar-thumb': {
-            borderRadius: '9999px', // tương đương rounded-full
-            backgroundColor: '#374151' // tương đương bg-gray-700
+            borderRadius: '9999px',
+            backgroundColor: '#374151'
           }
         },
         dark: {
           '&::-webkit-scrollbar-track': {
-            backgroundColor: '#374151' // tương đương bg-neutral-700
+            backgroundColor: '#374151'
           },
           '&::-webkit-scrollbar-thumb': {
-            backgroundColor: '#6b7280' // tương đương bg-neutral-500
+            backgroundColor: '#6b7280'
           }
         }
       },
@@ -90,6 +91,28 @@ const config: Config = {
       },
       backgroundImage: {
         gradient: 'linear-gradient(108deg, rgba(8,148,255,1) 0%, rgba(255,46,84,1) 70%, rgba(255,144,4,1) 100%)'
+      },
+      keyframes: {
+        'accordion-down': {
+          from: {
+            height: '0'
+          },
+          to: {
+            height: 'var(--radix-accordion-content-height)'
+          }
+        },
+        'accordion-up': {
+          from: {
+            height: 'var(--radix-accordion-content-height)'
+          },
+          to: {
+            height: '0'
+          }
+        }
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out'
       }
     }
   },
