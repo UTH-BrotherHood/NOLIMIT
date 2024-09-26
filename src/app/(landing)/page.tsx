@@ -1,11 +1,13 @@
 import Banner from '@/containers/landingpage/banner'
-import Robot from '@/containers/landingpage/robot'
+import FAQs from '@/containers/landingpage/faqs'
+import Showcase from '@/containers/landingpage/showcase'
 
 export default function Home() {
   return (
-    <div className='flex-col justify-center items-center h-screen'>
+    <div className='flex-col justify-center items-center'>
       <Banner />
-      {/* <Robot /> */}
+      <Showcase />
+      <FAQs />
     </div>
   )
 }

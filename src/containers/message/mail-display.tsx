@@ -14,11 +14,11 @@ interface MailDisplayProps {
 export function MailDisplay({ mail }: MailDisplayProps) {
   return (
     <div className='flex h-full flex-col'>
-      <div className='flex items-center'></div>
+      <div className=' flex items-center  '></div>
       <Separator />
       {mail ? (
-        <div className='flex flex-1 flex-col'>
-          <div className='flex items-start p-4 '>
+        <div className='relative flex flex-1 flex-col '>
+          <div className='absolute top-0 right-0 left-0 z-20 flex items-start p-4 bg-white dark:bg-[#171717] border-b-2'>
             <div className='flex items-start gap-4 text-sm '>
               <Avatar>
                 <AvatarImage alt={mail.name} />
@@ -65,10 +65,39 @@ export function MailDisplay({ mail }: MailDisplayProps) {
               <div className='ml-auto text-xs text-muted-foreground'>{format(new Date(mail.date), 'PPpp')}</div>
             )} */}
           </div>
-          <Separator />
-          <div className='flex-1 whitespace-pre-wrap p-4 text-sm'>{mail.text}</div>
-          <Separator className='mt-auto' />
-          <div className='py-4'>
+          {/* <div className='flex-1 whitespace-pre-wrap p-4 text-sm'>{mail.text}</div> */}
+
+          {/* chat messages */}
+          <div className='flex flex-col gap-4 mt-[4.5rem]  p-4 overflow-y-auto h-[30rem] scrollbar-default  dark:scrollbar-dark'>
+            <div className='flex items-start gap-4 w-[45%]'>
+              <Avatar>
+                <AvatarImage alt={mail.name} />
+                <AvatarFallback>
+                  {mail.name
+                    .split(' ')
+                    .map((chunk: any) => chunk[0])
+                    .join('')}
+                </AvatarFallback>
+              </Avatar>
+              <div className='flex-1 p-2 bg-gray-100 dark:bg-teal-900 rounded-lg'>
+                <div className='text-sm'>{mail.text}</div>
+              </div>
+            </div>
+            <div className='flex items-start gap-4 self-end  w-[45%] '>
+              <div className='flex-1 p-2 bg-blue-100 dark:bg-teal-700 rounded-lg'>
+                <div className='text-sm'>
+                  Thanks for reaching out! I’ll be ready for tomorrow’s meeting and will come prepared with any
+                  questions. Looking forward to hearing your ideas and discussing the next steps!
+                </div>
+              </div>
+              <Avatar>
+                <AvatarImage alt='You' />
+                <AvatarFallback>V</AvatarFallback>
+              </Avatar>
+            </div>
+          </div>
+
+          <div className='absolute bottom-0 right-0 left-0 py-4 border-t-2'>
             <MessageTypingForm />
           </div>
         </div>

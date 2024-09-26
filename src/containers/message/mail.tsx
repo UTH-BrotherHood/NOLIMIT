@@ -52,6 +52,7 @@ export function Mail({
     <TooltipProvider delayDuration={0}>
       <ResizablePanelGroup direction='horizontal' className='h-full items-stretch'>
         <ResizablePanel defaultSize={25} minSize={20} maxSize={40} collapsedSize={navCollapsedSize} collapsible={true}>
+          <Separator />
           <Tabs defaultValue='all'>
             <div className='flex items-center px-4 py-2'>
               <h1 className='text-xl font-bold'>Inbox</h1>
@@ -65,7 +66,7 @@ export function Mail({
               </TabsList>
             </div>
             <Separator />
-            <div className='bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
+            <div className='p-4 backdrop-blur '>
               <form>
                 <div className='relative'>
                   <Search className='absolute left-2 top-2.5 h-4 w-4 text-muted-foreground' />
@@ -73,10 +74,12 @@ export function Mail({
                 </div>
               </form>
             </div>
-            <TabsContent value='all' className='m-0'>
+            <Separator />
+            <Separator />
+            <TabsContent value='all' className='mt-1'>
               <MailList items={mails} />
             </TabsContent>
-            <TabsContent value='unread' className='m-0'>
+            <TabsContent value='unread' className='mt-1'>
               <MailList items={mails.filter((item) => !item.read)} />
             </TabsContent>
           </Tabs>
