@@ -51,7 +51,7 @@ export function Mail({
   return (
     <TooltipProvider delayDuration={0}>
       <ResizablePanelGroup direction='horizontal' className='h-full items-stretch'>
-        <ResizablePanel defaultSize={20} minSize={20} maxSize={35} collapsedSize={navCollapsedSize} collapsible={true}>
+        <ResizablePanel defaultSize={25} minSize={20} maxSize={40} collapsedSize={navCollapsedSize} collapsible={true}>
           <Tabs defaultValue='all'>
             <div className='flex items-center px-4 py-2'>
               <h1 className='text-xl font-bold'>Inbox</h1>
@@ -82,7 +82,7 @@ export function Mail({
           </Tabs>
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={80} maxSize={80}>
+        <ResizablePanel defaultSize={75} maxSize={75}>
           <MailDisplay mail={mails.find((item) => item.id === mail.selected) || null} />
         </ResizablePanel>
       </ResizablePanelGroup>
