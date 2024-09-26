@@ -12,6 +12,7 @@ import {
 import EmojiPicker, { Theme } from 'emoji-picker-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTheme } from 'next-themes'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 export default function MessageTypingForm() {
   const [message, setMessage] = useState('')
@@ -20,7 +21,6 @@ export default function MessageTypingForm() {
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false) // State to manage EmojiPicker visibility
   const emojiPickerRef = useRef<HTMLDivElement>(null) // Ref for EmojiPicker
-  const [activeIcon, setActiveIcon] = useState<string | null>(null) // Track the active icon
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value)
@@ -28,11 +28,6 @@ export default function MessageTypingForm() {
 
   const toggleEmojiPicker = () => {
     setShowEmojiPicker((prev) => !prev) // Toggle emoji picker visibility
-    setActiveIcon(showEmojiPicker ? null : 'emoji') // Set active icon for Emoji
-  }
-
-  const handleIconClick = (icon: string) => {
-    setActiveIcon((prev) => (prev === icon ? null : icon)) // Toggle active icon
   }
 
   const handleEmojiClick = (emojiData: { emoji: string }) => {
@@ -43,7 +38,6 @@ export default function MessageTypingForm() {
     const handleClickOutside = (event: MouseEvent) => {
       if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target as Node)) {
         setShowEmojiPicker(false)
-        setActiveIcon(null) // Reset active icon when clicking outside
       }
     }
 
@@ -60,33 +54,54 @@ export default function MessageTypingForm() {
     <form className=''>
       <div className='flex flex-col w-full gap-2'>
         <div className='flex gap-4 px-4 relative'>
-          <IconPaperclip
-            className={`h-6 w-6 text-muted-foreground cursor-pointer ${
-              activeIcon === 'paperclip' ? 'text-blue-500' : ''
-            }`}
-            onClick={() => handleIconClick('paperclip')}
-          />
-          <IconPhoto
-            className={`h-6 w-6 text-muted-foreground cursor-pointer ${activeIcon === 'photo' ? 'text-blue-500' : ''}`}
-            onClick={() => handleIconClick('photo')}
-          />
-          <IconFileSmile
-            className={`h-6 w-6 text-muted-foreground cursor-pointer ${activeIcon === 'file' ? 'text-blue-500' : ''}`}
-            onClick={() => handleIconClick('file')}
-          />
-          <IconCreditCard
-            className={`h-6 w-6 text-muted-foreground cursor-pointer ${
-              activeIcon === 'creditCard' ? 'text-blue-500' : ''
-            }`}
-            onClick={() => handleIconClick('creditCard')}
-          />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className='hover:bg-slate-100 dark:hover:bg-neutral-500 rounded-sm p-1'>
+                <IconPaperclip className={`h-6 w-6 text-muted-foreground dark:text-gray-100 cursor-pointer `} />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>Attach a file</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className='hover:bg-slate-100 dark:hover:bg-neutral-500 rounded-sm p-1'>
+                <IconPhoto className={`h-6 w-6 text-muted-foreground dark:text-gray-100 cursor-pointer`} />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>Send a photo</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className='hover:bg-slate-100 dark:hover:bg-neutral-500 rounded-sm p-1'>
+                <IconFileSmile className={`h-6 w-6 text-muted-foreground dark:text-gray-100 cursor-pointer `} />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>Send a sticker</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className='hover:bg-slate-100 dark:hover:bg-neutral-500 rounded-sm p-1'>
+                <IconCreditCard className={`h-6 w-6 text-muted-foreground dark:text-gray-100 cursor-pointer `} />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>Send credit card</TooltipContent>
+          </Tooltip>
+
           <div ref={emojiPickerRef}>
-            <IconMoodSmile
-              className={`h-6 w-6 text-muted-foreground cursor-pointer ${
-                activeIcon === 'emoji' ? 'text-blue-500' : ''
-              }`}
-              onClick={toggleEmojiPicker}
-            />
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className='hover:bg-slate-100 dark:hover:bg-neutral-500 rounded-sm p-1'>
+                  <IconMoodSmile
+                    className={`h-6 w-6 text-muted-foreground dark:text-gray-100 cursor-pointer`}
+                    onClick={toggleEmojiPicker}
+                  />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>Choose an emoji</TooltipContent>
+            </Tooltip>
           </div>
           {showEmojiPicker && (
             <div ref={emojiPickerRef} className='absolute -top-[30rem] left-44 z-10'>
