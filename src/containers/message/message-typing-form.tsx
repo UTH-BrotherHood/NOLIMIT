@@ -125,7 +125,7 @@ export default function MessageTypingForm() {
             autoCorrect='off'
             name='message'
             rows={1}
-            maxRows={6}
+            maxRows={5}
             value={message}
             onChange={handleTextareaChange}
           />
