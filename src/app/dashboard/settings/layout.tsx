@@ -4,8 +4,8 @@ import { SidebarNav } from '@/app/dashboard/settings/setting-sidebar-nav'
 import { Separator } from '@/components/ui/separator'
 
 export const metadata: Metadata = {
-  title: 'Forms',
-  description: 'Advanced form example using react-hook-form and Zod.'
+  title: 'Setting',
+  description: 'Setting For User'
 }
 
 const sidebarNavItems = [

@@ -1,18 +1,14 @@
-// export default function MessagePage() {
-//   return (
-//     <div className='flex flex-col justify-center items-center h-screen'>
-//       <div>Message Page</div>
-//       <div>Is Updating</div>
-//     </div>
-//   )
-// }
-
 import { cookies } from 'next/headers'
-import Image from 'next/image'
 
 import { Mail } from '@/containers/message/mail'
 
 import { accounts, mails } from '@/app/dashboard/message/data'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Message',
+  description: 'Stay connected with your team and clients in real-time using our powerful chat feature.'
+}
 
 export default function MessagePage() {
   const layout = cookies().get('react-resizable-panels:layout:mail')
