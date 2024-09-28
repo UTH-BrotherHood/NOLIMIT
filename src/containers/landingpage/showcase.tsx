@@ -4,7 +4,7 @@ import React from 'react'
 export default function Showcase() {
   return (
     <div className='relative flex justify-center items-center mt-14 px-8'>
-      <div className='relative rounded-lg border-2 border-gray-300 shadow-lg overflow-hidden bg-white'>
+      <div className='relative rounded-lg border-2 border-gray-300 shadow-lg overflow-hidden bg-red-600 '>
         {/* Thanh tiêu đề */}
         <div className='flex items-center justify-between h-[30px] bg-gray-200 px-2'>
           <div className='flex items-center'>
@@ -19,14 +19,7 @@ export default function Showcase() {
         </div>
 
         {/* Hình ảnh */}
-        <Image
-          priority
-          src={'https://i.ibb.co/5sFyFGW/showcase.jpg'}
-          width={1250}
-          height={750}
-          alt='showcase'
-          className='rounded-sm mt-[30px]'
-        />
+        <Image priority src={'/showcase.jpg'} width={1250} height={750} alt='showcase' className='rounded-b-sm ' />
 
         {/* Lớp mờ hình chữ U */}
         <div className='absolute bottom-0 right-0 left-0 h-[15rem] flex items-center justify-center'>

@@ -2,14 +2,14 @@ import { Metadata } from 'next'
 import React from 'react'
 
 export const metadata: Metadata = {
-  title: 'Schedule',
-  description: 'Schedule your tasks and events with ease using our scheduling feature.'
+  title: 'About Us',
+  description: 'Learn more about our team and our mission.'
 }
 
-export default function SchedulePage() {
+export default function AboutUsPage() {
   return (
     <div className='flex flex-col justify-center items-center h-screen'>
-      <div>Schedule Page</div>
+      <div>AboutUsPage Page</div>
       <div>Is Updating</div>
     </div>
   )

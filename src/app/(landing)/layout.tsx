@@ -8,7 +8,7 @@ export default function HomeLayout({ children }: { children: React.ReactNode }) 
     <ThemeProvider attribute='class' defaultTheme='light' forcedTheme='light'>
       <div className='no-scrollbar'>
         <Header />
-        {children}
+        <div className='mt-20'>{children}</div>
         <Footer />
       </div>
     </ThemeProvider>
