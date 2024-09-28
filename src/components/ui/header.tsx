@@ -1,10 +1,8 @@
 'use client'
 
-import * as React from 'react'
 import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
-// import { Icons } from '@/components/icons'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -19,6 +17,8 @@ import PlaningIcon from '../../../public/logo-navbar/planning-navbar'
 import SchedulingIcon from '../../../public/logo-navbar/scheduling-navbar'
 import RealtimeChattingIcon from '../../../public/logo-navbar/realtime-chatting-navbar'
 import TempLogo from '../../../public/temp-logo'
+import { IconCaretUpFilled, IconMenu2 } from '@tabler/icons-react'
+import { forwardRef, useEffect, useState } from 'react'
 
 const resources: { title: string; href: string; description: string }[] = [
   {
@@ -39,8 +39,31 @@ const resources: { title: string; href: string; description: string }[] = [
 ]
 
 export function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
+  const [prevScrollPos, setPrevScrollPos] = useState(0)
+
+  const handleMenuToggle = () => {
+    setIsMenuOpen((prev) => !prev)
+  }
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset
+      setIsVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10)
+      setPrevScrollPos(currentScrollPos)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [prevScrollPos])
+
   return (
-    <div className='bg-white'>
+    <div
+      className={`fixed top-0 z-40 w-full flex-none bg-white transition-all duration-300 ${
+        isVisible ? 'translate-y-0' : '-translate-y-full border-b-2'
+      }`}
+    >
       <div className='mx-auto px-4 lg:px-8 py-4'>
         <div className='flex h-16 items-center justify-between'>
           <div className='md:flex md:items-center md:gap-12'>
@@ -49,7 +72,7 @@ export function Header() {
             </a>
           </div>
 
-          <div className='hidden md:block'>
+          <div className='hidden lg:block'>
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
@@ -122,12 +145,11 @@ export function Header() {
           </div>
 
           <div className='flex items-center gap-4'>
-            <div className='sm:flex sm:gap-4'>
-              <a className=' px-5 py-2.5 text-sm font-semibold text-black ' href='/sign-in'>
-                Sign In
-              </a>
-
-              <div className='hidden sm:flex'>
+            <div className='flex'>
+              <div className='hidden lg:block'>
+                <a className=' px-5 py-2.5 text-sm font-semibold text-black ' href='/sign-in'>
+                  Sign In
+                </a>
                 <Link href={'/dashboard'}>
                   <Button size='lg' className='bg-black text-white font-semibold'>
                     Try It Now
@@ -136,19 +158,42 @@ export function Header() {
               </div>
             </div>
 
-            <div className='block md:hidden'>
-              <button className='rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75'>
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='size-5'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                  strokeWidth='2'
-                >
-                  <path strokeLinecap='round' strokeLinejoin='round' d='M4 6h16M4 12h16M4 18h16' />
-                </svg>
-              </button>
+            <div className='block lg:hidden'>
+              <Button size='icon' variant='ghost' onClick={handleMenuToggle}>
+                <IconMenu2 />
+              </Button>
+            </div>
+          </div>
+
+          {/* Mobile Menu */}
+          <div
+            className={`lg:hidden fixed top-0 left-0 right-0 bg-white z-50 flex items-center justify-center text-center w-full  transition-transform duration-300 ease-in-out ${
+              isMenuOpen ? 'translate-y-0 shadow-2xl border-b-2 rounded-lg' : '-translate-y-full'
+            }`}
+          >
+            <div className='p-4'>
+              <a href='/' className='text-2xl font-bold mb-6 block'>
+                <TempLogo />
+              </a>
+              <nav className='space-y-4'>
+                <Link href='/features' className='block text-lg font-semibold'>
+                  Features
+                </Link>
+                <Link href='/resources' className='block text-lg font-semibold'>
+                  Resources
+                </Link>
+                <Link href='/pricing' className='block text-lg font-semibold'>
+                  Pricing
+                </Link>
+                <Link href='/about-us' className='block text-lg font-semibold'>
+                  About Us
+                </Link>
+              </nav>
+              <div className='block lg:hidden'>
+                <Button size='icon' variant='ghost' onClick={handleMenuToggle}>
+                  <IconCaretUpFilled />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -157,7 +202,7 @@ export function Header() {
   )
 }
 
-const ListItem = React.forwardRef<React.ElementRef<'a'>, React.ComponentPropsWithoutRef<'a'>>(
+const ListItem = forwardRef<React.ElementRef<'a'>, React.ComponentPropsWithoutRef<'a'>>(
   ({ className, title, children, ...props }, ref) => {
     return (
       <li>
