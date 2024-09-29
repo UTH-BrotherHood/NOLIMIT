@@ -1,4 +1,5 @@
 import Banner from '@/containers/landingpage/banner'
+import Customer from '@/containers/landingpage/customer'
 import FAQs from '@/containers/landingpage/faqs'
 import Showcase from '@/containers/landingpage/showcase'
 
@@ -7,6 +8,7 @@ export default function Home() {
     <div className='flex-col justify-center items-center'>
       <Banner />
       <Showcase />
+      <Customer />
       <FAQs />
     </div>
   )

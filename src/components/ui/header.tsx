@@ -50,7 +50,7 @@ export function Header() {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollPos = window.pageYOffset
-      setIsVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10)
+      setIsVisible(prevScrollPos > currentScrollPos || currentScrollPos < 50)
       setPrevScrollPos(currentScrollPos)
     }
 

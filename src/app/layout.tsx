@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-y-auto scrollbar-default  dark:scrollbar-dark `}
+        className={`${geistSans.variable} ${geistMono.variable}  antialiased overflow-y-auto scrollbar-default  dark:scrollbar-dark `}
       >
         <Provider>
           <TopLoader />

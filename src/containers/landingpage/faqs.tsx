@@ -1,5 +1,6 @@
 import { AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Accordion } from '@radix-ui/react-accordion'
+import Balancer from 'react-wrap-balancer'
 
 const faqs = [
   {
@@ -35,8 +36,14 @@ const faqs = [
 
 export default function FAQs() {
   return (
-    <div className='px-8 xl:px-[20rem] py-11'>
-      <Accordion type='single' collapsible>
+    <div className='px-2 xl:px-[20rem] py-11'>
+      <div className='flex flex-col justify-center items-center text-center'>
+        <h2 className='text-2xl lg:text-5xl font-bold'>FAQ</h2>
+        <p className='text-base max-w-sm lg:max-w-full lg:text-xl lg:font-semibold'>
+          <Balancer>Find answers to common inquiries about our platform</Balancer>
+        </p>
+      </div>
+      <Accordion className='mt-8 px-4' type='single' collapsible>
         {faqs.map((faq) => (
           <AccordionItem key={faq.id} value={faq.id}>
             <AccordionTrigger>{faq.question}</AccordionTrigger>
