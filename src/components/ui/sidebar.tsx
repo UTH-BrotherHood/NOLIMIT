@@ -1,7 +1,7 @@
 'use client'
 import { cn } from '@/lib/utils'
 import Link, { LinkProps } from 'next/link'
-import React, { useState, createContext, useContext } from 'react'
+import React, { useState, createContext, useContext, forwardRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { IconMenu2, IconX } from '@tabler/icons-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
@@ -137,46 +137,52 @@ export const MobileSidebar = ({ className, children, ...props }: React.Component
   )
 }
 
-export const SidebarLink = ({ link, className, ...props }: { link: Links; className?: string; props?: LinkProps }) => {
-  const { open, animate } = useSidebar()
-  const pathname = usePathname()
-  const isActive = pathname === link.href
-  return (
-    <Link
-      href={link.href}
-      className={cn('flex items-center justify-start gap-2  group/sidebar py-4', className)}
-      {...props}
-    >
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div
-              className={`p-2 rounded-lg ${
-                isActive
-                  ? 'bg-black text-white dark:bg-white dark:text-gray-600'
-                  : 'hover:bg-slate-200 dark:hover:bg-neutral-500'
-              }`}
-            >
-              {link.icon}
-            </div>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>{link.label}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+export const SidebarLink = forwardRef<HTMLAnchorElement, { link: Links; className?: string }>(
+  ({ link, className, ...props }, ref) => {
+    const { open, animate } = useSidebar()
+    const pathname = usePathname()
+    const isActive = pathname === link.href
 
-      {open && (
-        <motion.span
-          animate={{
-            display: animate ? (open ? 'inline-block' : 'none') : 'inline-block',
-            opacity: animate ? (open ? 1 : 0) : 1
-          }}
-          className='text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0'
-        >
-          {link.label}
-        </motion.span>
-      )}
-    </Link>
-  )
-}
+    return (
+      <Link
+        href={link.href}
+        className={cn('flex items-center justify-start gap-2 group/sidebar py-4', className)}
+        ref={ref} // Chuyển ref vào Link component
+        {...props}
+      >
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div
+                className={`p-2 rounded-lg ${
+                  isActive
+                    ? 'bg-black text-white dark:bg-white dark:text-gray-600'
+                    : 'hover:bg-slate-200 dark:hover:bg-neutral-500'
+                }`}
+              >
+                {link.icon}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{link.label}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        {open && (
+          <motion.span
+            animate={{
+              display: animate ? (open ? 'inline-block' : 'none') : 'inline-block',
+              opacity: animate ? (open ? 1 : 0) : 1
+            }}
+            className='text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0'
+          >
+            {link.label}
+          </motion.span>
+        )}
+      </Link>
+    )
+  }
+)
+
+SidebarLink.displayName = 'SidebarLink'

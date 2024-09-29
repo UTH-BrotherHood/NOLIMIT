@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function Showcase() {
   return (
-    <div className='relative flex justify-center items-center mt-14 px-8'>
+    <div className='relative flex justify-center items-center mt-14 px-4 xl:px-[10rem]'>
       <div className='relative rounded-lg border-2 border-gray-300 shadow-lg overflow-hidden bg-red-600 '>
         {/* Thanh tiêu đề */}
         <div className='flex items-center justify-between h-[30px] bg-gray-200 px-2'>
@@ -19,7 +19,14 @@ export default function Showcase() {
         </div>
 
         {/* Hình ảnh */}
-        <Image priority src={'/showcase.jpg'} width={1250} height={750} alt='showcase' className='rounded-b-sm ' />
+        <Image
+          priority
+          src={'/showcase.jpg'}
+          width={1250}
+          height={750}
+          alt='showcase'
+          className='w-full h-auto rounded-b-sm '
+        />
 
         {/* Lớp mờ hình chữ U */}
         <div className='absolute bottom-0 right-0 left-0 h-[15rem] flex items-center justify-center'>
