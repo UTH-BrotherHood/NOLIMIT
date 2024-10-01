@@ -17,13 +17,16 @@ export default function Roadmap() {
 
               <div className='text-sm  prose prose-sm dark:prose-invert'>
                 {item?.image && (
-                  <Image
-                    src={item.image}
-                    alt='blog thumbnail'
-                    height='1000'
-                    width='1000'
-                    className='rounded-lg mb-10 object-cover'
-                  />
+                  <div className='relative w-full rounded-lg mb-10 overflow-hidden '>
+                    <Image
+                      src={item.image}
+                      alt='blog thumbnail'
+                      height='500'
+                      width='1000'
+                      className='rounded-lg h-72 object-cover'
+                    />
+                    <div className='absolute inset-0 bg-black opacity-15 hover:opacity-25 transition-all rounded-lg'></div>
+                  </div>
                 )}
                 {item.description}
               </div>
@@ -56,8 +59,7 @@ const dummyContent = [
       </>
     ),
     badge: 'Messaging',
-    image:
-      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=3540&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+    image: '/roadmap/Messaging.png'
   },
   {
     title: 'Project Management Features',
@@ -75,8 +77,7 @@ const dummyContent = [
       </>
     ),
     badge: 'Project Management',
-    image:
-      'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&q=80&w=3540&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+    image: '/roadmap/ProjectManagement.png'
   },
   {
     title: 'Enhanced Security and Data Encryption',
@@ -93,7 +94,6 @@ const dummyContent = [
       </>
     ),
     badge: 'Security',
-    image:
-      'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80&w=3506&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+    image: '/roadmap/Security.png'
   }
 ]
