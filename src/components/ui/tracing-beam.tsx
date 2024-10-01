@@ -15,9 +15,14 @@ export const TracingBeam = ({ children, className }: { children: React.ReactNode
 
   useEffect(() => {
     if (contentRef.current) {
-      setSvgHeight(contentRef.current.offsetHeight)
+      setSvgHeight(0)
+      setTimeout(() => {
+        if (contentRef.current) {
+          setSvgHeight(contentRef.current.offsetHeight)
+        }
+      }, 300)
     }
-  }, [])
+  }, [scrollYProgress])
 
   const y1 = useSpring(useTransform(scrollYProgress, [0, 0.8], [50, svgHeight]), {
     stiffness: 500,
