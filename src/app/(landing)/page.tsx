@@ -1,6 +1,7 @@
 import Banner from '@/containers/landingpage/banner'
 import Customer from '@/containers/landingpage/customer'
 import FAQs from '@/containers/landingpage/faqs'
+import Pricing from '@/containers/landingpage/pricing'
 import Showcase from '@/containers/landingpage/showcase'
 
 export default function Home() {
@@ -9,6 +10,7 @@ export default function Home() {
       <Banner />
       <Showcase />
       <Customer />
+      <Pricing />
       <FAQs />
     </div>
   )

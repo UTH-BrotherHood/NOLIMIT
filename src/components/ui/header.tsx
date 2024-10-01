@@ -131,11 +131,6 @@ export function Header() {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link href='/pricing' legacyBehavior passHref>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>Pricing</NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
                   <Link href='/roadmap' legacyBehavior passHref>
                     <NavigationMenuLink className={navigationMenuTriggerStyle()}>Roadmap</NavigationMenuLink>
                   </Link>
@@ -181,9 +176,6 @@ export function Header() {
                 <TempLogo />
               </a>
               <nav className='space-y-4'>
-                <Link href='/pricing' onClick={handleMenuToggle} className='block text-lg font-semibold'>
-                  Pricing
-                </Link>
                 <Link href='/roadmap' onClick={handleMenuToggle} className='block text-lg font-semibold'>
                   Roadmap
                 </Link>
