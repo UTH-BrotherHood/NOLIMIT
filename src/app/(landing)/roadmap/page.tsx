@@ -25,7 +25,7 @@ export default function Roadmap() {
                       width='1000'
                       className='rounded-lg h-72 object-cover'
                     />
-                    <div className='absolute inset-0 bg-black opacity-15 hover:opacity-25 transition-all rounded-lg'></div>
+                    <div className='absolute inset-0 bg-black opacity-5 hover:opacity-10 transition-all rounded-lg'></div>
                   </div>
                 )}
                 {item.description}
