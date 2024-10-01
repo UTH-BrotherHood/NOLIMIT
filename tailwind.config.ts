@@ -1,5 +1,16 @@
 import type { Config } from 'tailwindcss'
 const { fontFamily } = require('tailwindcss/defaultTheme')
+const colors = require('tailwindcss/colors')
+const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette')
+
+function addVariablesForColors({ addBase, theme }: any) {
+  let allColors = flattenColorPalette(theme('colors'))
+  let newVars = Object.fromEntries(Object.entries(allColors).map(([key, val]) => [`--${key}`, val]))
+
+  addBase({
+    ':root': newVars
+  })
+}
 
 const config: Config = {
   darkMode: ['class'],
@@ -149,7 +160,8 @@ const config: Config = {
       }
 
       addUtilities(scrollbarUtilities, ['dark'])
-    }
+    },
+    addVariablesForColors
   ]
 }
 export default config
