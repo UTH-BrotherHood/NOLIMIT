@@ -1,9 +1,7 @@
-import React from 'react'
 import { Metadata } from 'next'
+
 import { SidebarNav } from '@/app/dashboard/settings/setting-sidebar-nav'
 import { Separator } from '@/components/ui/separator'
-import { title } from 'process'
-import { IconLogout } from '@tabler/icons-react'
 
 export const metadata: Metadata = {
   title: 'Setting',
@@ -24,13 +22,6 @@ const sidebarNavItems = [
     href: '/dashboard/settings/appearance'
   }
 ]
-const sidebarNavItems2 = [
-  {
-    title: 'Log out',
-    href: '/dashboard/settings/logout',
-    icon: <IconLogout className='h-4 w-4 flex-shrink-0 ml-2 text-red-600' />
-  }
-]
 
 interface SettingsLayoutProps {
   children: React.ReactNode
@@ -48,7 +39,6 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
         <div className='flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0'>
           <aside className='-mx-4 lg:w-1/5'>
             <SidebarNav items={sidebarNavItems} />
-            <SidebarNav items={sidebarNavItems2} className='text-red-600 hover:!text-red-900' />
           </aside>
           <div className='flex-1 lg:max-w-2xl'>{children}</div>
         </div>
