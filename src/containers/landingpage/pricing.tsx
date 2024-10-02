@@ -66,9 +66,9 @@ export default function Pricing() {
   }
 
   return (
-    <div className='flex-col px-8 lg:flex justify-center items-center py-12'>
-      <div className='lg:max-w-5xl px-4 sm:px-6 lg:px-8'>
-        <div className='flex flex-col gap-8 items-center justify-center text-center mb-8'>
+    <div className='flex-col lg:flex justify-center items-center py-12 px-2 lg:px-[5rem] xl:px-[10rem]'>
+      <div className='w-full'>
+        <div className='flex flex-col gap-8 items-center justify-center text-center mb-8 '>
           <h2 data-aos='zoom-in' className='text-2xl lg:text-4xl font-bold'>
             Simple pricing for advanced people
           </h2>
@@ -77,10 +77,10 @@ export default function Pricing() {
           </p>
         </div>
         {/* Slider chỉ hiển thị trên màn hình nhỏ */}
-        <div className='block  w-full md:hidden'>
+        <div className='block  w-full md:hidden px-10'>
           <Slider {...settings}>
             {plans.map((plan, index) => (
-              <div key={index} className='divide-y divide-gray-200 rounded-lg border w-full  border-gray-200 shadow-sm'>
+              <div key={index} data-aos='flip-left' className='rounded-lg border w-full  border-gray-200 shadow-sm'>
                 <div className='p-6'>
                   <h2 className='text-lg font-medium text-gray-900'>
                     {plan.title}
@@ -138,13 +138,13 @@ export default function Pricing() {
         </div>
 
         {/* Hiển thị các thẻ kế hoạch theo dạng grid trên màn hình lớn */}
-        <div className='hidden md:grid md:grid-cols-3 gap-6'>
+        <div className='hidden md:flex  gap-10'>
           {plans.map((plan, index) => (
             <div
               key={index}
               data-aos='flip-left'
               data-aos-duration='500'
-              className='divide-y divide-gray-200 rounded-lg border w-full border-gray-200 shadow-sm'
+              className=' rounded-lg border w-full border-gray-200 shadow-sm'
             >
               <div className='p-6'>
                 <h2 className='text-lg font-medium text-gray-900 '>
