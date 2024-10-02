@@ -1,37 +1,49 @@
 'use client'
 
-import { cn } from '@/lib/utils'
+import { cn, handleErrorApi } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { IconBrandGoogleFilled, IconFidgetSpinner } from '@tabler/icons-react'
-import { useState } from 'react'
+import { IconFidgetSpinner } from '@tabler/icons-react'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { SignUpBody, SignUpBodyType } from '@/schemaValidations/auth.schema'
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
-interface SignUpFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+import { RegisterBody, RegisterBodyType } from '@/schemaValidations/auth.schema'
+import { useRegisterMutation } from '@/queries/useAuth'
+import { toast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
+interface RegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function SignUpForm({ className, ...props }: SignUpFormProps) {
-  const form = useForm<SignUpBodyType>({
-    resolver: zodResolver(SignUpBody),
+export function RegisterForm({ className, ...props }: RegisterFormProps) {
+  const registerMutation = useRegisterMutation()
+  const router = useRouter()
+  const form = useForm<RegisterBodyType>({
+    resolver: zodResolver(RegisterBody),
     defaultValues: {
       name: '',
       email: '',
       password: '',
-      confirm_password: ''
+      confirm_password: '',
+      date_of_birth: new Date().toISOString().split('T')[0]
     }
   })
 
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  async function onSubmit(data: SignUpBodyType) {
-    setIsLoading(true)
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+  async function onSubmit(data: RegisterBodyType) {
+    if (registerMutation.isPending) return
+    try {
+      const res = await registerMutation.mutateAsync(data)
+      toast({
+        description: res.payload.message
+      })
+      router.push('/dashboard')
+    } catch (error: any) {
+      console.log('🚀 ~ onSubmit ~ error:', error)
+      handleErrorApi({
+        error,
+        setError: form.setError
+      })
+    }
   }
 
   return (
@@ -99,8 +111,32 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                 )}
               />
             </div>
+            <FormField
+              control={form.control}
+              name='date_of_birth'
+              render={({ field, formState: { errors } }) => (
+                <FormItem>
+                  <div className='grid gap-2'>
+                    <Label htmlFor='date_of_birth'>Date of Birth</Label>
+                    <Input
+                      id='date_of_birth'
+                      type='date'
+                      placeholder='input your date of birth'
+                      required
+                      // Chuyển đổi giá trị thành chuỗi với định dạng YYYY-MM-DD để hiển thị đúng trong <input type='date'>
+                      value={field.value || ''}
+                      onChange={(e) => field.onChange(e.target.value)}
+                      onBlur={field.onBlur}
+                      name={field.name}
+                      ref={field.ref}
+                    />
+                    <FormMessage>{errors.date_of_birth?.message}</FormMessage>
+                  </div>
+                </FormItem>
+              )}
+            />
             <Button type='submit' className='w-full'>
-              {isLoading && <IconFidgetSpinner className='mr-2 h-4 w-4 animate-spin' />}
+              {registerMutation.isPending && <IconFidgetSpinner className='mr-2 h-4 w-4 animate-spin' />}
               Sign In
             </Button>
           </div>
