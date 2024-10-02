@@ -36,14 +36,16 @@ const faqs = [
 
 export default function FAQs() {
   return (
-    <div className='px-2 xl:px-[20rem] py-11'>
+    <div className='py-11 px-2 lg:px-[5rem] xl:px-[10rem]'>
       <div className='flex flex-col justify-center items-center text-center'>
-        <h2 className='text-2xl lg:text-5xl font-bold'>FAQ</h2>
-        <p className='text-base max-w-sm lg:max-w-full lg:text-xl lg:font-semibold'>
+        <h2 data-aos='fade-down' className='text-2xl lg:text-5xl font-bold'>
+          FAQ
+        </h2>
+        <p data-aos='fade-up' className='text-base max-w-sm lg:text-lg lg:max-w-xl text-slate-500'>
           <Balancer>Find answers to common inquiries about our platform</Balancer>
         </p>
       </div>
-      <Accordion className='mt-8 px-4' type='single' collapsible>
+      <Accordion data-aos='fade-up' className='mt-8 px-4' type='single' collapsible>
         {faqs.map((faq) => (
           <AccordionItem key={faq.id} value={faq.id}>
             <AccordionTrigger>{faq.question}</AccordionTrigger>
