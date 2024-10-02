@@ -141,7 +141,7 @@ export const SidebarLink = forwardRef<HTMLAnchorElement, { link: Links; classNam
   ({ link, className, ...props }, ref) => {
     const { open, animate } = useSidebar()
     const pathname = usePathname()
-    const isActive = pathname.split('/')[2] ? link.href.includes(pathname.split('/')[2]) : link.href === pathname
+    const isActive = pathname === link.href
 
     return (
       <Link
