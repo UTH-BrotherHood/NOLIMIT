@@ -147,7 +147,7 @@ export function Header() {
           <div className='flex items-center gap-4'>
             <div className='flex'>
               <div className='hidden lg:block'>
-                <a className=' px-5 py-2.5 text-sm font-semibold text-black ' href='/sign-in'>
+                <a className=' px-5 py-2.5 text-sm font-semibold text-black ' href='/login'>
                   Sign In
                 </a>
                 <Link href={'/dashboard'}>
