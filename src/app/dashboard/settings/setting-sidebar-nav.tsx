@@ -10,6 +10,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
     href: string
     title: string
+    icon?: React.ReactNode
   }[]
 }
 
@@ -29,6 +30,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
           )}
         >
           {item.title}
+          {item.icon}
         </Link>
       ))}
     </nav>
