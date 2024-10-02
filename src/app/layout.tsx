@@ -4,6 +4,7 @@ import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import TopLoader from '@/components/top-loader'
 import { Provider } from 'react-wrap-balancer'
+import AppProvider from '@/components/app-provider'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -35,9 +36,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable}  antialiased overflow-y-auto scrollbar-default  dark:scrollbar-dark `}
       >
         <Provider>
-          <TopLoader />
-          {children}
-          <Toaster />
+          <AppProvider>
+            <TopLoader />
+            {children}
+            <Toaster />
+          </AppProvider>
         </Provider>
       </body>
     </html>
