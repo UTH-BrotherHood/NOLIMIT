@@ -36,7 +36,7 @@ const faqs = [
 
 export default function FAQs() {
   return (
-    <div className='px-2 xl:px-[20rem] py-11'>
+    <div className='py-11 px-2 lg:px-[5rem] xl:px-[10rem]'>
       <div className='flex flex-col justify-center items-center text-center'>
         <h2 data-aos='fade-down' className='text-2xl lg:text-5xl font-bold'>
           FAQ
