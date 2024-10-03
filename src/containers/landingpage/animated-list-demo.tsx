@@ -21,14 +21,35 @@ let notifications = [
     color: '#00C9A7'
   },
   {
-    name: 'User join your team',
+    name: 'NOLIMIT Group',
     description: 'GiaLuat has joined your team',
     time: '10m ago',
     icon: '👤',
     color: '#FFB800'
   },
   {
-    name: 'New message',
+    name: 'NOLIMIT Group',
+    description: 'DuyenDo has joined your team',
+    time: '10m ago',
+    icon: '👤',
+    color: '#FFBff0'
+  },
+  {
+    name: 'NOLIMIT Group',
+    description: 'YenTran has joined your team',
+    time: '10m ago',
+    icon: '👤',
+    color: '#FFBff0'
+  },
+  {
+    name: 'NOLIMIT Group',
+    description: 'KongKong has joined your team',
+    time: '10m ago',
+    icon: '👤',
+    color: '#FF9900'
+  },
+  {
+    name: 'NOLIMIT Group',
     description: 'KennyNguyen has sent you a message',
     time: '5m ago',
     icon: '💬',
