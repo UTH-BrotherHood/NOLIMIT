@@ -24,20 +24,10 @@ export default function Banner() {
         typeSpeed={40}
       />
       <Link href={'/dashboard'}>
-        <Button size='lg' className='hidden lg:block bg-black text-white font-semibold z-10'>
+        <Button size='lg' className='bg-black text-white font-semibold z-10'>
           <HyperText text='Try It Now' />
         </Button>
       </Link>
-      <Button
-        disabled
-        className='block lg:hidden cursor-not-allowed font-semibold py-2 px-8 rounded-lg text-white bg-primary hover:opacity-80'
-      >
-        Try It Now
-      </Button>
-      <div className='text-center lg:hidden'>
-        <Badge>Mobile currently unavailable</Badge>
-        <div>Please open this page on desktop</div>
-      </div>
     </div>
   )
 }

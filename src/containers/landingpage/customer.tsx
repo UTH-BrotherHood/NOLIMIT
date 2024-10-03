@@ -14,7 +14,7 @@ export default function Customer() {
 
   return (
     <div className='w-full'>
-      <div className='bg-black text-white mt-8 rounded-lg flex flex-col items-center justify-center max-width-large max-width-100vw font-semibold text-2xl gap-4 lg:gap-8 py-10 xl:py-[7rem] xl:px-[10rem]'>
+      <div className='bg-black text-white mt-8 flex flex-col items-center justify-center max-width-large max-width-100vw font-semibold text-2xl gap-4 lg:gap-8 py-10 xl:py-[7rem] xl:px-[10rem]'>
         <h2 data-aos='fade-down' className='text-center text-lg lg:text-2xl'>
           Loved by many professional service teams
         </h2>
