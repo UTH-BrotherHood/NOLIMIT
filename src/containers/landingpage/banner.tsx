@@ -10,8 +10,8 @@ import Balancer from 'react-wrap-balancer'
 
 export default function Banner() {
   return (
-    <div className='relative flex flex-col justify-center items-center pt-10 lg:pt-24 xl:pt-32 gap-8 select-none'>
-      <h1 className='text-4xl md:text-4xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center mt-6'>
+    <div className='relative flex flex-col justify-center items-center Lg:pt-10 lg:pt-24 xl:pt-32 gap-2 lg:gap-8 select-none'>
+      <h1 className='text-4xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center mt-6'>
         <Balancer>
           The resource management platform to plan your{' '}
           <Cover className='bg-gradient bg-clip-text text-transparent'>team's best work</Cover>
