@@ -70,3 +70,16 @@ export type SignUpBodyType = z.infer<typeof SignUpBody>
 //   .strict()
 
 // export type LogoutBodyType = z.TypeOf<typeof LogoutBody>
+export const UpdateProfileBody = z
+  .object({
+    name: z.string().min(1, { message: AUTH_ERROR_MESSAGE.NAME_REQUIRED }),
+    email: z.string().email({ message: AUTH_ERROR_MESSAGE.EMAIL_INVALID }), // Email không thay đổi nhưng vẫn cần để gửi vào API
+    password: z.string().min(6, { message: AUTH_ERROR_MESSAGE.PASSWORD_MIN }).optional(), // Mật khẩu là tùy chọn
+    confirm_password: z.string().min(1, { message: AUTH_ERROR_MESSAGE.CONFIRM_PASSWORD_REQUIRED }).optional()
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    message: AUTH_ERROR_MESSAGE.CONFIRM_PASSWORD_NOT_MATCH,
+    path: ['confirm_password']
+  })
+
+export type UpdateProfileBodyType = z.infer<typeof UpdateProfileBody>
