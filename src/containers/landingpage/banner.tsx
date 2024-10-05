@@ -25,7 +25,7 @@ export default function Banner() {
       />
       <Link href={'/dashboard'}>
         <Button size='lg' className='bg-black text-white font-semibold z-10'>
-          <HyperText text='Try It Now' />
+          Try For Free
         </Button>
       </Link>
     </div>
