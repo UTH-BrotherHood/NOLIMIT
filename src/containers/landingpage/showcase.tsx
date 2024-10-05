@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function Showcase() {
   return (
-    <div className='relative flex justify-center items-center mt-14 px-2 lg:px-[5rem] xl:px-[10rem]'>
+    <div className='relative flex justify-center items-center mt-4 lg:mt-14 px-2 lg:px-[5rem] xl:px-[10rem]'>
       <div className='relative rounded-lg border-2 border-gray-300 shadow-lg overflow-hidden'>
         {/* Thanh tiêu đề */}
         <div className='flex items-center justify-between h-[30px] bg-gray-200 px-2'>

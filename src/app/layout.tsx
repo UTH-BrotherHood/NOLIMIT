@@ -4,6 +4,7 @@ import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import TopLoader from '@/components/top-loader'
 import { Provider } from 'react-wrap-balancer'
+import AppProvider from '@/components/app-provider'
 import { AOSInit } from '@/components/aos'
 
 const geistSans = localFont({
@@ -32,14 +33,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <AOSInit />
       <body
         className={`${geistSans.variable} ${geistMono.variable}  antialiased overflow-y-auto scrollbar-default  dark:scrollbar-dark `}
       >
         <Provider>
-          <TopLoader />
-          {children}
-          <Toaster />
+          <AppProvider>
+            <TopLoader />
+            {children}
+            <Toaster />
+          </AppProvider>
         </Provider>
       </body>
     </html>

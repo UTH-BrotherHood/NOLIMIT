@@ -7,12 +7,12 @@ import Showcase from '@/containers/landingpage/showcase'
 
 export default function Home() {
   return (
-    <div className='flex-col justify-center items-center'>
+    <div className='flex-col justify-center items-center '>
       <Banner />
       <Showcase />
       <Customer />
       <Features />
-      <Pricing />
+      {/* <Pricing /> */}
       <FAQs />
     </div>
   )

@@ -5,10 +5,12 @@ import { useEffect } from 'react'
 
 export const AOSInit = () => {
   useEffect(() => {
-    Aos.init({
-      easing: 'ease-out-quad',
-      duration: 500
-    })
+    if (typeof window !== 'undefined') {
+      Aos.init({
+        easing: 'ease-out-quad',
+        duration: 500
+      })
+    }
   }, [])
 
   return null

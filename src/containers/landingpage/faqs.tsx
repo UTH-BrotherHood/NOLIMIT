@@ -36,19 +36,17 @@ const faqs = [
 
 export default function FAQs() {
   return (
-    <div className='py-11 px-2 lg:px-[5rem] xl:px-[10rem]'>
-      <div className='flex flex-col justify-center items-center text-center'>
-        <h2 data-aos='fade-down' className='text-2xl lg:text-5xl font-bold'>
-          FAQ
-        </h2>
-        <p data-aos='fade-up' className='text-base max-w-sm lg:text-lg lg:max-w-xl text-slate-500'>
-          <Balancer>Find answers to common inquiries about our platform</Balancer>
+    <div className='py-11 px-2 flex flex-col lg:flex-row lg:px-[5rem] xl:px-[10rem]'>
+      <div data-aos='fade-right' className='lg:w-1/3 lg:pr-[56px] text-center lg:text-start'>
+        <h2 className='py-4 text-4xl font-medium lg:text-[42px] lg:leading-[58px]'>Frequently Asked Questions</h2>
+        <p className='text-base text-center lg:text-left lg:text-lg lg:max-w-xl text-slate-500'>
+          <Balancer>Have another question? Email us here.</Balancer>
         </p>
       </div>
-      <Accordion data-aos='fade-up' className='mt-8 px-4' type='single' collapsible>
+      <Accordion data-aos='fade-left' className='w-full px-4 py-8 lg:px-0 lg:py-0 lg:w-[70%]' type='single' collapsible>
         {faqs.map((faq) => (
           <AccordionItem key={faq.id} value={faq.id}>
-            <AccordionTrigger>{faq.question}</AccordionTrigger>
+            <AccordionTrigger className='font-semibold lg:text-lg text-gray-600'>{faq.question}</AccordionTrigger>
             <AccordionContent>{faq.answer}</AccordionContent>
           </AccordionItem>
         ))}
