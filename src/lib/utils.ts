@@ -45,10 +45,12 @@ export const normalizePath = (path: string) => {
 export const getAccessTokenFromLocalStorage = () => (isBrowser ? localStorage.getItem('access_token') : null)
 
 export const getRefreshTokenFromLocalStorage = () => (isBrowser ? localStorage.getItem('refresh_token') : null)
+
 export const setAccessTokenToLocalStorage = (value: string) => isBrowser && localStorage.setItem('access_token', value)
 
 export const setRefreshTokenToLocalStorage = (value: string) =>
   isBrowser && localStorage.setItem('refresh_token', value)
+
 export const removeTokensFromLocalStorage = () => {
   isBrowser && localStorage.removeItem('access_token')
   isBrowser && localStorage.removeItem('refresh_token')
