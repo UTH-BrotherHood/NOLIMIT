@@ -152,7 +152,7 @@ export function Header() {
                 </a>
                 <Link href={'/dashboard'}>
                   <Button size='lg' className='bg-black text-white font-semibold'>
-                    Try It Now
+                    Try For Free
                   </Button>
                 </Link>
               </div>
