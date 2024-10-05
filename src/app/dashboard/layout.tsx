@@ -10,7 +10,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
       <div className={'hidden lg:flex flex-col h-screen w-full md:flex-row dark:bg-[#171717] overflow-hidden'}>
         <SidebarDashboard />
-        <div className='w-full overflow-y-auto scrollbar-default  dark:scrollbar-dark  '>{children}</div>
+        <div className='w-full overflow-y-auto scrollbar-default  dark:scrollbar-dark'>{children}</div>
       </div>
     </ThemeProvider>
   )

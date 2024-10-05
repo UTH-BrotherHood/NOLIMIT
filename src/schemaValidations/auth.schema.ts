@@ -33,7 +33,7 @@ export const RegisterBody = z
     confirm_password: z.string().min(1, { message: AUTH_ERROR_MESSAGE.CONFIRM_PASSWORD_REQUIRED }),
     date_of_birth: z
       .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Invalid date format. Expected YYYY-MM-DD' }) // Định dạng ngày tháng năm
+      .regex(/^\d{4}-\d{2}-\d{2}$/, { message: AUTH_ERROR_MESSAGE.DATE_OF_BIRTH_INVALID })
       .transform((val) => new Date(val).toISOString().split('T')[0])
   })
   .refine((data) => data.password === data.confirm_password, {
@@ -77,22 +77,28 @@ export const LogoutBody = z
   })
   .strict()
 
-
 export type LogoutBodyType = z.TypeOf<typeof LogoutBody>
 
-export const UpdateProfileBody = z
-  .object({
-    name: z.string().min(1, { message: AUTH_ERROR_MESSAGE.NAME_REQUIRED }),
-    email: z.string().email({ message: AUTH_ERROR_MESSAGE.EMAIL_INVALID }), // Email không thay đổi nhưng vẫn cần để gửi vào API
-    password: z.string().min(6, { message: AUTH_ERROR_MESSAGE.PASSWORD_MIN }).optional(), // Mật khẩu là tùy chọn
-    confirm_password: z.string().min(1, { message: AUTH_ERROR_MESSAGE.CONFIRM_PASSWORD_REQUIRED }).optional()
-  })
-  .refine((data) => data.password === data.confirm_password, {
-    message: AUTH_ERROR_MESSAGE.CONFIRM_PASSWORD_NOT_MATCH,
-    path: ['confirm_password']
-  })
+export const UpdateProfileBody = z.object({
+  name: z.string().min(1, { message: AUTH_ERROR_MESSAGE.NAME_REQUIRED }),
+  email: z.string().email({ message: AUTH_ERROR_MESSAGE.EMAIL_INVALID }),
+  date_of_birth: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, { message: AUTH_ERROR_MESSAGE.DATE_OF_BIRTH_INVALID })
+    .transform((val) => new Date(val).toISOString().split('T')[0])
+})
 
 export type UpdateProfileBodyType = z.infer<typeof UpdateProfileBody>
 
+export const ChangePasswordBody = z
+  .object({
+    current_password: z.string().min(6, { message: AUTH_ERROR_MESSAGE.PASSWORD_MIN }),
+    new_password: z.string().min(6, { message: AUTH_ERROR_MESSAGE.PASSWORD_MIN }),
+    confirm_new_password: z.string().min(1, { message: AUTH_ERROR_MESSAGE.CONFIRM_PASSWORD_REQUIRED })
+  })
+  .refine((data) => data.new_password === data.confirm_new_password, {
+    message: AUTH_ERROR_MESSAGE.CONFIRM_PASSWORD_NOT_MATCH,
+    path: ['confirm_new_password']
+  })
 
-
+export type ChangePasswordBodyType = z.infer<typeof ChangePasswordBody>

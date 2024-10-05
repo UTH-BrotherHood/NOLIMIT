@@ -2,7 +2,6 @@ import React from 'react'
 import { Metadata } from 'next'
 import { SidebarNav } from '@/app/dashboard/settings/setting-sidebar-nav'
 import { Separator } from '@/components/ui/separator'
-import { title } from 'process'
 import { IconLogout } from '@tabler/icons-react'
 
 export const metadata: Metadata = {
