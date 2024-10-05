@@ -46,6 +46,7 @@ export class EntityError extends HttpError {
 }
 
 let clientLogoutRequest: null | Promise<any> = null
+
 const isClient = typeof window !== 'undefined'
 
 const request = async <Response>(
@@ -65,8 +66,8 @@ const request = async <Response>(
     body instanceof FormData
       ? {}
       : {
-          'Content-Type': 'application/json'
-        }
+        'Content-Type': 'application/json'
+      }
 
   // Xử lý access_token từ localStorage hoặc từ cookie (server-side)
   if (isClient) {
@@ -112,7 +113,7 @@ const request = async <Response>(
       // Xử lý đăng xuất và điều hướng khi bị lỗi xác thực
       if (isClient) {
         const locale = Cookies.get('NEXT_LOCALE')
-        if (!clientLogoutRequest) {
+        if (!clientLogoutRequest) { // Đảm bảo rằng chỉ có 1 request logout được gửi đi
           clientLogoutRequest = fetch('/api/v1/user/logout', {
             method: 'POST',
             body: null, // Logout mình sẽ cho phép luôn luôn thành công
@@ -154,20 +155,23 @@ const request = async <Response>(
   // Lưu lại token sau khi đăng nhập hoặc làm mới token
   if (isClient) {
     const normalizeUrl = normalizePath(url)
-    if (['api/v1/user/login'].includes(normalizeUrl)) {
+    // Xử lý khi đăng nhập
+    if ('api/auth/login' === normalizeUrl) {
       const { access_token, refresh_token } = (payload as LoginResType).data
       setAccessTokenToLocalStorage(access_token)
       setRefreshTokenToLocalStorage(refresh_token)
     }
     // Xử lý khi làm mới token (làm mới access_token và refresh_token)
-    else if ('api/v1/user/refresh-token' === normalizeUrl) {
+    else if ('api/auth/refresh-token' === normalizeUrl) {
       const { access_token, refresh_token } = payload as {
         access_token: string
         refresh_token: string
       }
       setAccessTokenToLocalStorage(access_token)
       setRefreshTokenToLocalStorage(refresh_token)
-    } else if (['/api/v1/user/login'].includes(normalizeUrl)) {
+    }
+    // Xử lý khi đăng xuất
+    else if ('api/auth/logout' === normalizeUrl) {
       removeTokensFromLocalStorage()
     }
   }
