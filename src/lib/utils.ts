@@ -136,10 +136,10 @@ export const checkAndRefreshToken = async (param?: {
     try {
       const { payload } = await authApiRequest.refreshToken()
       const { access_token, refresh_token } = payload.data
-      const decodedAccessToken = decodeToken(access_token)
-      const decodedRefreshToken = decodeToken(refresh_token)
+
       setAccessTokenToLocalStorage(access_token)
       setRefreshTokenToLocalStorage(refresh_token)
+
       param?.onSuccess && param.onSuccess()
     } catch (error) {
       removeTokensFromLocalStorage()
