@@ -96,6 +96,7 @@ const request = async <Response>(
     body,
     method
   })
+
   const payload: Response = await res.json()
   const data = {
     status: res.status,
@@ -142,7 +143,6 @@ const request = async <Response>(
         // redirect(`/login?accessToken=${access_token}`)
         Cookies.set('access_token', '', { path: '/', expires: new Date(0) })
         Cookies.set('refresh_token', '', { path: '/', expires: new Date(0) })
-        // redirect('/login')
         if (isClient) {
           window.location.href = '/login'
         }
