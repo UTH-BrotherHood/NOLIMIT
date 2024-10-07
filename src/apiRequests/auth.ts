@@ -31,17 +31,17 @@ const authApiRequest = {
 
   sLogout: (
     body: LogoutBodyType & {
-      accessToken: string
+      access_token: string
     }
   ) =>
     http.post(
       '/api/v1/user/logout',
       {
-        refreshToken: body.refreshToken
+        refresh_token: body.refresh_token
       },
       {
         headers: {
-          Authorization: `Bearer ${body.accessToken}`
+          Authorization: `Bearer ${body.access_token}`
         }
       }
     ),
@@ -49,11 +49,13 @@ const authApiRequest = {
   logout: () => http.post('/api/auth/logout', null, { baseUrl: '' }), // client gọi đến route handler, không cần truyền AT và RT vào body vì AT và RT tự  động gửi thông qua cookie rồi
 
   sRefreshToken: (body: RefreshTokenBodyType) => http.post<RefreshTokenResType>('/api/v1/user/refresh-token', body),
+
   async refreshToken() {
+    // Nếu refreshTokenRequest đã tồn tại thì trả về luôn, không gọi request mới
     if (this.refreshTokenRequest) {
       return this.refreshTokenRequest
     }
-    this.refreshTokenRequest = http.post<RefreshTokenResType>('/api/v1/user/refresh-token', null, {
+    this.refreshTokenRequest = http.post<RefreshTokenResType>('/api/auth/refresh-token', null, {
       baseUrl: ''
     })
     const result = await this.refreshTokenRequest
@@ -61,7 +63,7 @@ const authApiRequest = {
     return result
   },
 
-  setTokenToCookie: (body: { accessToken: string; refreshToken: string }) =>
+  setTokenToCookie: (body: { access_token: string; refresh_token: string }) =>
     http.post('/api/auth/token', body, { baseUrl: '' })
 }
 

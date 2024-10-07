@@ -38,7 +38,6 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
       })
       router.push('/dashboard')
     } catch (error: any) {
-      console.log('🚀 ~ onSubmit ~ error:', error)
       handleErrorApi({
         error,
         setError: form.setError
