@@ -69,12 +69,12 @@ export default function SidebarDashboard() {
       const result = await logoutMutation.mutateAsync()
       const payload = result.payload as { message: string }
       toast({
-        title: payload.message
+        description: payload.message
       })
 
-      router.replace('/login') // Điều hướng về trang đăng nhập sau khi đăng xuất thành công
+      router.replace('/login')
     } catch (error: any) {
-      setOpenModal(false) // Đóng modal nếu có lỗi xảy ra
+      setOpenModal(false)
       handleErrorApi({
         error
       })
@@ -125,13 +125,13 @@ export default function SidebarDashboard() {
 
       {/* Modal */}
       {openModal && (
-        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
-          <div className='bg-white p-6 rounded-lg shadow-lg'>
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-opacity-50'>
+          <div className='p-6 rounded-lg shadow-lg bg-background'>
             <h2 className='text-xl font-semibold mb-4'>Are you sure you want to log out?</h2>
             <p className='mb-6'>Logging out will end your current session. You can always log back in later.</p>
             <div className='flex justify-end gap-4'>
               <Button onClick={handleCancelLogout}>Cancel</Button>
-              <Button variant='destructive' onClick={handleLogout}>
+              <Button variant='secondary' onClick={handleLogout}>
                 Log out
               </Button>
             </div>
