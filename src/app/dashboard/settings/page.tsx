@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Separator } from '@/components/ui/separator'
 import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
@@ -9,12 +9,14 @@ import { IconEdit } from '@tabler/icons-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { UserContext } from '@/contexts/profileContext'
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false)
   const [bio, setBio] = useState(
     'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis iste earum ullam sed debitis natus. Recusandae asperiores, a dignissimos tenetur non architecto minima accusamus quidem excepturi explicabo libero, ad sed?'
   )
+  const { user, setUser } = useContext(UserContext) || {}
 
   const handleEditClick = () => {
     setIsEditing(true)
@@ -40,8 +42,8 @@ export default function Profile() {
               <AvatarImage src='https://citibella.vn/wp-content/uploads/2024/09/anh-avatar-trang-09pycvl.jpg' />
             </Avatar>
             <div className='mt-auto'>
-              <h1 className='font-semibold text-2xl text-stone-950'>Nolimit User</h1>
-              <Badge>Verified</Badge>
+              <h1 className='font-semibold text-2xl text-stone-950'>{user?.username}</h1>
+              <Badge>{user?.verify}</Badge>
             </div>
           </div>
           <div className='absolute inset-0'>
@@ -63,7 +65,7 @@ export default function Profile() {
             {isEditing ? (
               <div className='space-y-4'>
                 <Textarea
-                  value={bio}
+                  value={user?.bio}
                   onChange={(e) => setBio(e.target.value)} // Update bio on input change
                   className='w-full h-[8rem]'
                 />
@@ -75,7 +77,7 @@ export default function Profile() {
                 </div>
               </div>
             ) : (
-              <p className='text-sm font-extralight text-stone-700'>{bio}</p>
+              <p className='text-sm font-extralight text-stone-700'>{user?.bio}</p>
             )}
           </div>
         </div>
