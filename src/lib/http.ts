@@ -66,8 +66,8 @@ const request = async <Response>(
     body instanceof FormData
       ? {}
       : {
-        'Content-Type': 'application/json'
-      }
+          'Content-Type': 'application/json'
+        }
 
   // Xử lý access_token từ localStorage hoặc từ cookie (server-side)
   if (isClient) {
@@ -84,7 +84,8 @@ const request = async <Response>(
   // Nếu không truyền baseUrl (hoặc baseUrl = undefined) thì lấy từ envConfig.NEXT_PUBLIC_API_ENDPOINT
   // Nếu truyền baseUrl thì lấy giá trị truyền vào, truyền vào '' thì đồng nghĩa với việc chúng ta gọi API đến Next.js Server
 
-  const baseUrl = options?.baseUrl === undefined ? envConfig?.NEXT_PUBLIC_API_ENDPOINT ?? '' : options.baseUrl
+  const baseUrl = options?.baseUrl === undefined ? envConfig.NEXT_PUBLIC_API_ENDPOINT : options.baseUrl
+
   const fullUrl = `${baseUrl}/${normalizePath(url)}`
 
   const res = await fetch(fullUrl, {
@@ -114,7 +115,8 @@ const request = async <Response>(
       // Xử lý đăng xuất và điều hướng khi bị lỗi xác thực
       if (isClient) {
         const locale = Cookies.get('NEXT_LOCALE')
-        if (!clientLogoutRequest) { // Đảm bảo rằng chỉ có 1 request logout được gửi đi
+        if (!clientLogoutRequest) {
+          // Đảm bảo rằng chỉ có 1 request logout được gửi đi
           clientLogoutRequest = fetch('/api/v1/user/logout', {
             method: 'POST',
             body: null, // Logout mình sẽ cho phép luôn luôn thành công
