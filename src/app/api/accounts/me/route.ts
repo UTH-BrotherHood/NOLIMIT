@@ -1,0 +1,32 @@
+import { cookies } from 'next/headers'
+import accountApiRequest from '@/apiRequests/account'
+
+export async function GET(request: Request) {
+  const cookieStore = cookies()
+  const accessToken = cookieStore.get('access_token')?.value
+
+  if (!accessToken) {
+    return Response.json(
+      {
+        message: 'Không tìm thấy access_token'
+      },
+      {
+        status: 400
+      }
+    )
+  }
+  try {
+    const { payload } = await accountApiRequest.sMe(accessToken)
+
+    return Response.json(payload)
+  } catch (error) {
+    return Response.json(
+      {
+        message: 'Có lỗi xảy ra'
+      },
+      {
+        status: 401
+      }
+    )
+  }
+}
