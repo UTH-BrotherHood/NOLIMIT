@@ -27,9 +27,9 @@ export default function Roadmap() {
                       alt='blog thumbnail'
                       height='500'
                       width='1000'
-                      className='rounded-lg h-72 object-cover'
+                      className='rounded-lg h-full object-cover'
                     />
-                    <div className='absolute inset-0 bg-black opacity-5 hover:opacity-10 transition-all rounded-lg'></div>
+                    {/* <div className='absolute inset-0 bg-black opacity-5 hover:opacity-10 transition-all rounded-lg'></div> */}
                   </div>
                 )}
                 <div data-aos='fade-up' data-aos-anchor-placement='top-bottom'>
@@ -65,7 +65,7 @@ const dummyContent = [
       </>
     ),
     badge: 'Messaging',
-    image: '/roadmap/Messaging.png'
+    image: '/roadmap/message.svg'
   },
   {
     title: 'Project Management Features',
@@ -83,7 +83,7 @@ const dummyContent = [
       </>
     ),
     badge: 'Project Management',
-    image: '/roadmap/ProjectManagement.png'
+    image: '/roadmap/project_management.svg'
   },
   {
     title: 'Enhanced Security and Data Encryption',
@@ -100,6 +100,6 @@ const dummyContent = [
       </>
     ),
     badge: 'Security',
-    image: '/roadmap/Security.png'
+    image: '/roadmap/security.svg'
   }
 ]
