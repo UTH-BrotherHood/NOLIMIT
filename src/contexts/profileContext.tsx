@@ -1,5 +1,6 @@
 'use client'
 
+import { getAccessTokenFromLocalStorage } from '@/lib/utils'
 import { useGetMeMutation } from '@/queries/useAccount'
 import { AccountType } from '@/schemaValidations/account.schema'
 import React, { createContext, useState, useEffect, ReactNode } from 'react'
@@ -19,6 +20,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<AccountType | null>(null)
   const me = useGetMeMutation() // Gọi hook ở đây
 
+  const isLoggin = getAccessTokenFromLocalStorage() && getAccessTokenFromLocalStorage()
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,7 +33,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       }
     }
 
-    fetchData()
+    if (isLoggin) {
+      fetchData()
+    }
   }, []) // Dependency array rỗng để chỉ gọi API khi component được mount (F5 hoặc load trang)
 
   return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>
