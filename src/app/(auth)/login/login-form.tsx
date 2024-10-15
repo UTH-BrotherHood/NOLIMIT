@@ -13,10 +13,18 @@ import { LoginBody, LoginBodyType } from '@/schemaValidations/auth.schema'
 import { useLoginMutation } from '@/queries/useAuth'
 import { toast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
+import { useContext } from 'react'
+import { UserContext } from '@/contexts/profileContext'
+import { useGetMeMutation } from '@/queries/useAccount'
+
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function SignInForm({ className, ...props }: SignInFormProps) {
   const loginMutation = useLoginMutation()
+  const me = useGetMeMutation() // Gọi hook ở đây
+
+  const { setUser } = useContext(UserContext) || {}
+
   const router = useRouter()
 
   const form = useForm<LoginBodyType>({
@@ -34,14 +42,16 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
     try {
       const res = await loginMutation.mutateAsync(data)
 
+      const response = await me.mutateAsync()
       toast({
         description: res.payload.message
       })
+      setUser?.(response.payload.data)
       router.push('/dashboard')
     } catch (error: any) {
       toast({
-        title: 'Lỗi',
-        description: error?.payload?.message ?? 'Lỗi không xác định',
+        title: 'Error',
+        description: error?.payload?.message ?? 'Error unknown',
         variant: 'destructive'
       })
       handleErrorApi({
