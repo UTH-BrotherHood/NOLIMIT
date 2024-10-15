@@ -7,10 +7,10 @@ const accountApiRequest = {
       baseUrl: ''
     }),
 
-  sMe: (accessToken: string) =>
+  sMe: (access_token: string) =>
     http.get<AccountResType>('/api/v1/user/me', {
       headers: {
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${access_token}`
       }
     })
 }

@@ -27,7 +27,7 @@ export type LoginResType = z.TypeOf<typeof LoginRes>
 
 export const RegisterBody = z
   .object({
-    name: z.string().min(1, { message: AUTH_ERROR_MESSAGE.NAME_REQUIRED }),
+    username: z.string().min(1, { message: AUTH_ERROR_MESSAGE.NAME_REQUIRED }),
     email: z.string().email({ message: AUTH_ERROR_MESSAGE.EMAIL_INVALID }),
     password: z.string().min(6, { message: AUTH_ERROR_MESSAGE.PASSWORD_MIN }),
     confirm_password: z.string().min(1, { message: AUTH_ERROR_MESSAGE.CONFIRM_PASSWORD_REQUIRED }),

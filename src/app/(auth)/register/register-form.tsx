@@ -21,7 +21,7 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
   const form = useForm<RegisterBodyType>({
     resolver: zodResolver(RegisterBody),
     defaultValues: {
-      name: '',
+      username: '',
       email: '',
       password: '',
       confirm_password: '',
@@ -72,12 +72,12 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
             <div className='flex w-full gap-2'>
               <FormField
                 control={form.control}
-                name='name'
+                name='username'
                 render={({ field, formState: { errors } }) => (
                   <FormItem>
                     <div className='grid gap-2'>
-                      <Label htmlFor='name'>Name</Label>
-                      <Input id='name' type='text' placeholder='input your name' required {...field} />
+                      <Label htmlFor='username'>Name</Label>
+                      <Input id='username' type='text' placeholder='input your name' required {...field} />
                       <FormMessage>{Boolean(errors.email?.message)}</FormMessage>
                     </div>
                   </FormItem>

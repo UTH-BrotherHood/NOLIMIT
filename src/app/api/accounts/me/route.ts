@@ -3,9 +3,9 @@ import accountApiRequest from '@/apiRequests/account'
 
 export async function GET(request: Request) {
   const cookieStore = cookies()
-  const accessToken = cookieStore.get('access_token')?.value
+  const access_token = cookieStore.get('access_token')?.value
 
-  if (!accessToken) {
+  if (!access_token) {
     return Response.json(
       {
         message: 'Không tìm thấy access_token'
@@ -16,8 +16,7 @@ export async function GET(request: Request) {
     )
   }
   try {
-    const { payload } = await accountApiRequest.sMe(accessToken)
-
+    const { payload } = await accountApiRequest.sMe(access_token)
     return Response.json(payload)
   } catch (error) {
     return Response.json(
