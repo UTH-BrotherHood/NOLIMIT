@@ -27,7 +27,7 @@ import { toast } from '@/hooks/use-toast'
 import { UserContext } from '@/contexts/profileContext'
 
 export default function SidebarDashboard() {
-  const { user, setUser } = useContext(UserContext) || {}
+  const { user } = useContext(UserContext) || {}
   const links = [
     {
       label: 'Dashboard',
