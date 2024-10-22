@@ -66,8 +66,8 @@ const request = async <Response>(
     body instanceof FormData
       ? {}
       : {
-          'Content-Type': 'application/json'
-        }
+        'Content-Type': 'application/json'
+      }
 
   // Xử lý access_token từ localStorage hoặc từ cookie (server-side)
   if (isClient) {
@@ -165,6 +165,14 @@ const request = async <Response>(
     }
     // Xử lý khi làm mới token (làm mới access_token và refresh_token)
     else if ('api/auth/refresh-token' === normalizeUrl) {
+      const { access_token, refresh_token } = payload as {
+        access_token: string
+        refresh_token: string
+      }
+      setAccessTokenToLocalStorage(access_token)
+      setRefreshTokenToLocalStorage(refresh_token)
+    }
+    else if ('api/auth/token' === normalizeUrl) {
       const { access_token, refresh_token } = payload as {
         access_token: string
         refresh_token: string
