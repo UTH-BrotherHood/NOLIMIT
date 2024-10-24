@@ -2,11 +2,11 @@ import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { UseFormSetError } from 'react-hook-form'
 import { toast } from '@/hooks/use-toast'
-import CryptoJS from 'crypto-js';
-import envConfig from '@/config';
+import CryptoJS from 'crypto-js'
+import envConfig from '@/config'
 import { jwtDecode } from 'jwt-decode'
-import { TokenPayload } from '@/types/jwt.type';
-import authApiRequest from '@/apiRequests/auth';
+import { TokenPayload } from '@/types/jwt.type'
+import authApiRequest from '@/apiRequests/auth'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -36,8 +36,8 @@ export const handleErrorApi = ({
     })
   } else {
     toast({
-      title: 'Lỗi',
-      description: error?.payload?.message ?? 'Lỗi không xác định',
+      title: 'Error',
+      description: error?.payload?.message ?? 'Error unknown',
       variant: 'destructive',
       duration: duration ?? 5000
     })
@@ -50,56 +50,55 @@ export const normalizePath = (path: string) => {
   return path.startsWith('/') ? path.slice(1) : path
 }
 
-
 export const encryptData = (data: string): string => {
   return CryptoJS.AES.encrypt(data, `${envConfig?.SECRET_KEY}`).toString()
 }
 
 export const decryptData = (encryptedData: string): string => {
   try {
-    const bytes = CryptoJS.AES.decrypt(encryptedData, `${envConfig?.SECRET_KEY}`);
-    return bytes.toString(CryptoJS.enc.Utf8);
+    const bytes = CryptoJS.AES.decrypt(encryptedData, `${envConfig?.SECRET_KEY}`)
+    return bytes.toString(CryptoJS.enc.Utf8)
   } catch (error) {
-    console.error('Lỗi khi giải mã:', error);
-    return '';
+    console.error('Lỗi khi giải mã:', error)
+    return ''
   }
-};
+}
 
 // export const getAccessTokenFromLocalStorage = () => (isClient ? localStorage.getItem('access_token') : null)
 export const getAccessTokenFromLocalStorage = (): string | null => {
   if (isClient) {
-    const encryptedToken = localStorage.getItem('access_token');
+    const encryptedToken = localStorage.getItem('access_token')
     if (encryptedToken) {
-      return decryptData(encryptedToken);
+      return decryptData(encryptedToken)
     }
   }
-  return null;
+  return null
 }
 
 // export const getRefreshTokenFromLocalStorage = () => (isClient ? localStorage.getItem('refresh_token') : null)
 export const getRefreshTokenFromLocalStorage = (): string | null => {
   if (isClient) {
-    const encryptedToken = localStorage.getItem('refresh_token');
+    const encryptedToken = localStorage.getItem('refresh_token')
     if (encryptedToken) {
-      return decryptData(encryptedToken);
+      return decryptData(encryptedToken)
     }
   }
-  return null;
+  return null
 }
 
 export const setAccessTokenToLocalStorage = (value: string) => {
   if (isClient) {
-    const encryptedToken = encryptData(value);
-    localStorage.setItem('access_token', encryptedToken);
+    const encryptedToken = encryptData(value)
+    localStorage.setItem('access_token', encryptedToken)
   }
-};
+}
 
 export const setRefreshTokenToLocalStorage = (value: string) => {
   if (isClient) {
-    const encryptedToken = encryptData(value);
-    localStorage.setItem('refresh_token', encryptedToken);
+    const encryptedToken = encryptData(value)
+    localStorage.setItem('refresh_token', encryptedToken)
   }
-};
+}
 
 export const removeTokensFromLocalStorage = () => {
   isClient && localStorage.removeItem('access_token')
@@ -128,11 +127,7 @@ export const checkAndRefreshToken = async (param?: {
   }
 
   // trường hợp access token hết hạn thì refresh token
-  if (
-    param?.force ||
-    decodedAccessToken.exp - now <
-    (decodedAccessToken.exp - decodedAccessToken.iat) / 3
-  ) {
+  if (param?.force || decodedAccessToken.exp - now < (decodedAccessToken.exp - decodedAccessToken.iat) / 3) {
     try {
       const { payload } = await authApiRequest.refreshToken()
       const { access_token, refresh_token } = payload.data

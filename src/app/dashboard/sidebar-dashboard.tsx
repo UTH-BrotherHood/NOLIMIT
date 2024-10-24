@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {
   IconBrandTelegram,
   IconCalendarTime,
@@ -24,8 +24,10 @@ import { useRouter } from 'next/navigation'
 import { useLogoutMutation } from '@/queries/useAuth'
 import { handleErrorApi } from '@/lib/utils'
 import { toast } from '@/hooks/use-toast'
+import { UserContext } from '@/contexts/profileContext'
 
 export default function SidebarDashboard() {
+  const { user } = useContext(UserContext) || {}
   const links = [
     {
       label: 'Dashboard',
@@ -112,7 +114,7 @@ export default function SidebarDashboard() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='center'>
-            <DropdownMenuLabel>username</DropdownMenuLabel>
+            <DropdownMenuLabel>{user?.username}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Link href='/dashboard/settings'>Settings</Link>

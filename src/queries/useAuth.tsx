@@ -19,8 +19,8 @@ export const useRegisterMutation = () => {
   })
 }
 
-// export const useSetTokenToCookieMutation = () => {
-//   return useMutation({
-//     mutationFn: authApiRequest.setTokenToCookie
-//   })
-// }
+export const useSetTokenToCookieMutation = () => {
+  return useMutation({
+    mutationFn: authApiRequest.setTokenToCookie
+  })
+}
