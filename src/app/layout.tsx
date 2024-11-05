@@ -6,6 +6,7 @@ import TopLoader from '@/components/top-loader'
 import { Provider } from 'react-wrap-balancer'
 import AppProvider from '@/components/app-provider'
 import { AOSInit } from '@/components/aos'
+import { UserProvider } from '@/contexts/profileContext'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -38,9 +39,11 @@ export default function RootLayout({
       >
         <Provider>
           <AppProvider>
-            <TopLoader />
-            {children}
-            <Toaster />
+            <UserProvider>
+              <TopLoader />
+              {children}
+              <Toaster />
+            </UserProvider>
           </AppProvider>
         </Provider>
       </body>

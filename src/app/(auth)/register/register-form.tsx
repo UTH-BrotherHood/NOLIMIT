@@ -21,7 +21,7 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
   const form = useForm<RegisterBodyType>({
     resolver: zodResolver(RegisterBody),
     defaultValues: {
-      name: '',
+      username: '',
       email: '',
       password: '',
       confirm_password: '',
@@ -38,7 +38,6 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
       })
       router.push('/dashboard')
     } catch (error: any) {
-      console.log('🚀 ~ onSubmit ~ error:', error)
       handleErrorApi({
         error,
         setError: form.setError
@@ -59,19 +58,6 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
           <div className='grid gap-4'>
             <FormField
               control={form.control}
-              name='name'
-              render={({ field, formState: { errors } }) => (
-                <FormItem>
-                  <div className='grid gap-2'>
-                    <Label htmlFor='name'>Name</Label>
-                    <Input id='name' type='text' placeholder='input your name' required {...field} />
-                    <FormMessage>{Boolean(errors.email?.message)}</FormMessage>
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name='email'
               render={({ field, formState: { errors } }) => (
                 <FormItem>
@@ -83,29 +69,40 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
                 </FormItem>
               )}
             />
-            <div className='flex gap-2'>
+            <div className='flex w-full gap-2'>
               <FormField
                 control={form.control}
-                name='password'
+                name='username'
                 render={({ field, formState: { errors } }) => (
                   <FormItem>
                     <div className='grid gap-2'>
-                      <Label htmlFor='password'>Password</Label>
-                      <Input id='password' type='password' placeholder='password' required {...field} />
-                      <FormMessage>{Boolean(errors.password?.message)}</FormMessage>
+                      <Label htmlFor='username'>Name</Label>
+                      <Input id='username' type='text' placeholder='input your name' required {...field} />
+                      <FormMessage>{Boolean(errors.email?.message)}</FormMessage>
                     </div>
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
-                name='confirm_password'
+                name='date_of_birth'
                 render={({ field, formState: { errors } }) => (
                   <FormItem>
                     <div className='grid gap-2'>
-                      <Label htmlFor='confirm_password'>Password Confirmation</Label>
-                      <Input id='confirm_password' type='password' placeholder='confirm password' required {...field} />
-                      <FormMessage>{Boolean(errors.password?.message)}</FormMessage>
+                      <Label htmlFor='date_of_birth'>Date of Birth</Label>
+                      <Input
+                        id='date_of_birth'
+                        type='date'
+                        placeholder='input your date of birth'
+                        required
+                        // Chuyển đổi giá trị thành chuỗi với định dạng YYYY-MM-DD để hiển thị đúng trong <input type='date'>
+                        value={field.value || ''}
+                        onChange={(e) => field.onChange(e.target.value)}
+                        onBlur={field.onBlur}
+                        name={field.name}
+                        ref={field.ref}
+                      />
+                      <FormMessage>{errors.date_of_birth?.message}</FormMessage>
                     </div>
                   </FormItem>
                 )}
@@ -113,28 +110,31 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
             </div>
             <FormField
               control={form.control}
-              name='date_of_birth'
+              name='password'
               render={({ field, formState: { errors } }) => (
                 <FormItem>
                   <div className='grid gap-2'>
-                    <Label htmlFor='date_of_birth'>Date of Birth</Label>
-                    <Input
-                      id='date_of_birth'
-                      type='date'
-                      placeholder='input your date of birth'
-                      required
-                      // Chuyển đổi giá trị thành chuỗi với định dạng YYYY-MM-DD để hiển thị đúng trong <input type='date'>
-                      value={field.value || ''}
-                      onChange={(e) => field.onChange(e.target.value)}
-                      onBlur={field.onBlur}
-                      name={field.name}
-                      ref={field.ref}
-                    />
-                    <FormMessage>{errors.date_of_birth?.message}</FormMessage>
+                    <Label htmlFor='password'>Password</Label>
+                    <Input id='password' type='password' placeholder='password' required {...field} />
+                    <FormMessage>{Boolean(errors.password?.message)}</FormMessage>
                   </div>
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name='confirm_password'
+              render={({ field, formState: { errors } }) => (
+                <FormItem>
+                  <div className='grid gap-2'>
+                    <Label htmlFor='confirm_password'>Password Confirmation</Label>
+                    <Input id='confirm_password' type='password' placeholder='confirm password' required {...field} />
+                    <FormMessage>{Boolean(errors.password?.message)}</FormMessage>
+                  </div>
+                </FormItem>
+              )}
+            />
+
             <Button type='submit' className='w-full'>
               {registerMutation.isPending && <IconFidgetSpinner className='mr-2 h-4 w-4 animate-spin' />}
               Sign In

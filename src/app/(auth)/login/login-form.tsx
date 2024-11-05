@@ -13,10 +13,19 @@ import { LoginBody, LoginBodyType } from '@/schemaValidations/auth.schema'
 import { useLoginMutation } from '@/queries/useAuth'
 import { toast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
+import { useContext } from 'react'
+import { UserContext } from '@/contexts/profileContext'
+import { useGetMeMutation } from '@/queries/useAccount'
+import envConfig from '@/config'
+
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function SignInForm({ className, ...props }: SignInFormProps) {
   const loginMutation = useLoginMutation()
+  const me = useGetMeMutation()
+
+  const { setUser } = useContext(UserContext) || {}
+
   const router = useRouter()
 
   const form = useForm<LoginBodyType>({
@@ -34,14 +43,16 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
     try {
       const res = await loginMutation.mutateAsync(data)
 
+      const response = await me.mutateAsync()
       toast({
         description: res.payload.message
       })
+      setUser?.(response.payload.data)
       router.push('/dashboard')
     } catch (error: any) {
       toast({
-        title: 'Lỗi',
-        description: error?.payload?.message ?? 'Lỗi không xác định',
+        title: 'Error',
+        description: error?.payload?.message ?? 'Error unknown',
         variant: 'destructive'
       })
       handleErrorApi({
@@ -49,6 +60,10 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
         setError: form.setError
       })
     }
+  }
+
+  const handleGoogleSignIn = () => {
+    router.push(`${envConfig.NEXT_PUBLIC_API_ENDPOINT}/api/v1/user/google`)
   }
 
   return (
@@ -123,13 +138,13 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
           <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
         </div>
       </div>
-      <Button variant='outline' type='button' disabled={loginMutation.isPending} className='cursor-not-allowed'>
+      <Button variant='outline' type='button' disabled={loginMutation.isPending} onClick={handleGoogleSignIn}>
         {loginMutation.isPending ? (
           <IconFidgetSpinner className='mr-2 h-4 w-4 animate-spin' />
         ) : (
           <IconBrandGoogleFilled className='mr-2 h-4 w-4' />
         )}{' '}
-        Sign in with Google (Coming Soon)
+        Sign in with Google
       </Button>
       <p className='text-center text-sm text-muted-foreground'>
         Don't have an account?{' '}

@@ -84,7 +84,8 @@ const request = async <Response>(
   // Nếu không truyền baseUrl (hoặc baseUrl = undefined) thì lấy từ envConfig.NEXT_PUBLIC_API_ENDPOINT
   // Nếu truyền baseUrl thì lấy giá trị truyền vào, truyền vào '' thì đồng nghĩa với việc chúng ta gọi API đến Next.js Server
 
-  const baseUrl = options?.baseUrl === undefined ? envConfig?.NEXT_PUBLIC_API_ENDPOINT ?? '' : options.baseUrl
+  const baseUrl = options?.baseUrl === undefined ? envConfig.NEXT_PUBLIC_API_ENDPOINT : options.baseUrl
+
   const fullUrl = `${baseUrl}/${normalizePath(url)}`
 
   const res = await fetch(fullUrl, {
@@ -96,6 +97,7 @@ const request = async <Response>(
     body,
     method
   })
+
   const payload: Response = await res.json()
   const data = {
     status: res.status,
@@ -113,7 +115,8 @@ const request = async <Response>(
       // Xử lý đăng xuất và điều hướng khi bị lỗi xác thực
       if (isClient) {
         const locale = Cookies.get('NEXT_LOCALE')
-        if (!clientLogoutRequest) { // Đảm bảo rằng chỉ có 1 request logout được gửi đi
+        if (!clientLogoutRequest) {
+          // Đảm bảo rằng chỉ có 1 request logout được gửi đi
           clientLogoutRequest = fetch('/api/v1/user/logout', {
             method: 'POST',
             body: null, // Logout mình sẽ cho phép luôn luôn thành công
@@ -142,7 +145,6 @@ const request = async <Response>(
         // redirect(`/login?accessToken=${access_token}`)
         Cookies.set('access_token', '', { path: '/', expires: new Date(0) })
         Cookies.set('refresh_token', '', { path: '/', expires: new Date(0) })
-        // redirect('/login')
         if (isClient) {
           window.location.href = '/login'
         }
@@ -163,6 +165,14 @@ const request = async <Response>(
     }
     // Xử lý khi làm mới token (làm mới access_token và refresh_token)
     else if ('api/auth/refresh-token' === normalizeUrl) {
+      const { access_token, refresh_token } = payload as {
+        access_token: string
+        refresh_token: string
+      }
+      setAccessTokenToLocalStorage(access_token)
+      setRefreshTokenToLocalStorage(refresh_token)
+    }
+    else if ('api/auth/token' === normalizeUrl) {
       const { access_token, refresh_token } = payload as {
         access_token: string
         refresh_token: string

@@ -1,5 +1,5 @@
 import { AUTH_ERROR_MESSAGE } from '@/constants/errorValidationMessage'
-import z, { date } from 'zod'
+import z from 'zod'
 
 export const LoginBody = z
   .object({
@@ -27,7 +27,7 @@ export type LoginResType = z.TypeOf<typeof LoginRes>
 
 export const RegisterBody = z
   .object({
-    name: z.string().min(1, { message: AUTH_ERROR_MESSAGE.NAME_REQUIRED }),
+    username: z.string().min(1, { message: AUTH_ERROR_MESSAGE.NAME_REQUIRED }),
     email: z.string().email({ message: AUTH_ERROR_MESSAGE.EMAIL_INVALID }),
     password: z.string().min(6, { message: AUTH_ERROR_MESSAGE.PASSWORD_MIN }),
     confirm_password: z.string().min(1, { message: AUTH_ERROR_MESSAGE.CONFIRM_PASSWORD_REQUIRED }),
@@ -55,7 +55,7 @@ export type RegisterResType = z.TypeOf<typeof RegisterRes>
 
 export const RefreshTokenBody = z
   .object({
-    refreshToken: z.string()
+    refresh_token: z.string()
   })
   .strict()
 
@@ -63,8 +63,8 @@ export type RefreshTokenBodyType = z.TypeOf<typeof RefreshTokenBody>
 
 export const RefreshTokenRes = z.object({
   data: z.object({
-    accessToken: z.string(),
-    refreshToken: z.string()
+    access_token: z.string(),
+    refresh_token: z.string()
   }),
   message: z.string()
 })
@@ -73,7 +73,7 @@ export type RefreshTokenResType = z.TypeOf<typeof RefreshTokenRes>
 
 export const LogoutBody = z
   .object({
-    refreshToken: z.string()
+    refresh_token: z.string()
   })
   .strict()
 
