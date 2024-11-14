@@ -177,9 +177,8 @@ export default function ChatBottombar({ isMobile, sendMessage, selectedUser }: C
             onKeyDown={handleKeyPress}
             onChange={handleInputChange}
             placeholder='Type a message...'
-            className='rounded-full'
           />
-          <div className='absolute right-4 bottom-2  '>
+          <div className='absolute right-4 bottom-4'>
             <EmojiPicker
               onChange={(value) => {
                 setMessage(message + value)
