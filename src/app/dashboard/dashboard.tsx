@@ -87,9 +87,8 @@ export default function UserDashboard() {
   }
 
   return (
-    <div className='container mx-auto p-4 space-y-4'>
+    <div className='container w-full mx-auto p-4 space-y-8 '>
       <h1 className='text-3xl font-bold mb-6'>My Dashboard</h1>
-
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
         {/* Project Status Chart */}
         <Card className='col-span-1 md:col-span-1 lg:col-span-1'>
