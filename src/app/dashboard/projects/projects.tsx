@@ -344,7 +344,7 @@ export default function ProjectManagementKanban() {
             key={status}
             onDragOver={onDragOver}
             onDrop={(e) => onDrop(e, status)}
-            className='bg-gray-100 p-4 rounded-lg'
+            className='bg-gray-100 dark:bg-gray-800 p-4 rounded-lg'
           >
             <h2 className='text-lg font-semibold mb-4'>{status}</h2>
             {filteredProjects
