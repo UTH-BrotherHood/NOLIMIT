@@ -1,3 +1,4 @@
+import Projects from '@/app/dashboard/projects/projects'
 import { Metadata } from 'next'
 import React from 'react'
 
@@ -7,10 +8,5 @@ export const metadata: Metadata = {
 }
 
 export default function ProjectsPage() {
-  return (
-    <div className='flex flex-col justify-center items-center h-screen'>
-      <div>Projects Page</div>
-      <div>Is Updating</div>
-    </div>
-  )
+  return <Projects />
 }
