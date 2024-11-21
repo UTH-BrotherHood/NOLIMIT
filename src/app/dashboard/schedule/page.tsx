@@ -1,16 +1,16 @@
+import Schedule from '@/app/dashboard/schedule/schedule'
 import { Metadata } from 'next'
 import React from 'react'
 
 export const metadata: Metadata = {
   title: 'Schedule',
-  description: 'Schedule your tasks and events with ease using our scheduling feature.'
+  description: 'Manage your schedule and events with ease using our schedule feature.'
 }
 
 export default function SchedulePage() {
   return (
-    <div className='flex flex-col justify-center items-center h-screen'>
-      <div>Schedule Page</div>
-      <div>Is Updating</div>
+    <div>
+      <Schedule />
     </div>
   )
 }
