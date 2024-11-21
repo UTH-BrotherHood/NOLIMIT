@@ -1,6 +1,7 @@
 import SidebarDashboard from '@/app/dashboard/sidebar-dashboard'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Badge } from '@/components/ui/badge'
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider attribute='class' defaultTheme='light' enableSystem disableTransitionOnChange>
@@ -8,9 +9,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Badge>Mobile currently unavailable</Badge>
         <div>Please open this page on desktop</div>
       </div>
-      <div className={'hidden lg:flex flex-col h-screen w-full md:flex-row dark:bg-[#171717] overflow-hidden'}>
+      <div className='hidden lg:flex h-screen w-full dark:bg-[#171717]'>
         <SidebarDashboard />
-        <div className='w-full overflow-y-auto scrollbar-default  dark:scrollbar-dark'>{children}</div>
+        <div className='w-full ml-[55px] scrollbar-default dark:scrollbar-dark'>{children}</div>
       </div>
     </ThemeProvider>
   )

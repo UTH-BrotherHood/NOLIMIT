@@ -10,12 +10,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { UpdateProfileBody, UpdateProfileBodyType } from '@/schemaValidations/auth.schema'
-import { set } from 'date-fns'
 import { useState } from 'react'
 
-interface UpdateUserFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-export default function EditAccountPage({ className, ...props }: UpdateUserFormProps) {
+export default function EditAccountPage() {
   const [loading, setLoading] = useState(false)
   const form = useForm<UpdateProfileBodyType>({
     resolver: zodResolver(UpdateProfileBody),
@@ -26,7 +23,6 @@ export default function EditAccountPage({ className, ...props }: UpdateUserFormP
     }
   })
 
-  // Handler submit form (logic for API calls should be added later)
   function onSubmit(data: UpdateProfileBodyType) {
     setLoading(true)
     setTimeout(() => {
@@ -35,7 +31,7 @@ export default function EditAccountPage({ className, ...props }: UpdateUserFormP
   }
 
   return (
-    <div className={cn('grid gap-6', className)} {...props}>
+    <div className='grid gap-6'>
       <Form {...form}>
         <form
           className='space-y-2 max-w-[400px] flex-shrink-0 w-full'

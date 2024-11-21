@@ -29,7 +29,7 @@ export default function Roadmap() {
                       width='1000'
                       className='rounded-lg h-full object-cover'
                     />
-                    {/* <div className='absolute inset-0 bg-black opacity-5 hover:opacity-10 transition-all rounded-lg'></div> */}
+                    {/* <div className='absolute inset-0 bg-black opacity-10 hover:opacity-5 transition-all rounded-lg'></div> */}
                   </div>
                 )}
                 <div data-aos='fade-up' data-aos-anchor-placement='top-bottom'>

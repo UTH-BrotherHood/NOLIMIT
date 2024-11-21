@@ -59,5 +59,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/dashboard', '/login', '/refresh-token']
+  matcher: ['/', '/login', '/refresh-token']
 }
