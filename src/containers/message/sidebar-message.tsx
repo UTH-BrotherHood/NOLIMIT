@@ -5,7 +5,7 @@ import { MoreHorizontal, SquarePen } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip'
-import { Avatar, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ConversationType } from '@/schemaValidations/conversation.schema'
 import { useContext } from 'react'
 import { UserContext } from '@/contexts/profileContext'
@@ -90,6 +90,17 @@ export function Sidebar({ chats, isCollapsed, isMobile, onUserSelect }: SidebarP
                         alt='avatar'
                         className='w-10 h-10'
                       />
+                      <AvatarFallback>
+                        <span className='sr-only'>
+                          {chat.is_group
+                            ? typeof chat.name === 'string'
+                              ? chat.name
+                              : 'Unnamed Group'
+                            : typeof chat.name === 'object'
+                            ? getOtherUserName(chat.name, user?.username)
+                            : chat.name}
+                        </span>
+                      </AvatarFallback>
                     </Avatar>
                     {chat.is_group && (
                       <div className='absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full px-1'>
@@ -133,10 +144,23 @@ export function Sidebar({ chats, isCollapsed, isMobile, onUserSelect }: SidebarP
             >
               <Avatar className='flex justify-center items-center'>
                 <AvatarImage
-                  src='https://static.minhtuanmobile.com/uploads/editer/images/truyen-cam-hung-voi-hinh-nen-chu-chuot-dau-bep-17.webp'
+                  src={
+                    'https://static.minhtuanmobile.com/uploads/editer/images/truyen-cam-hung-voi-hinh-nen-chu-chuot-dau-bep-17.webp'
+                  }
                   alt='avatar'
                   className='w-10 h-10'
                 />
+                <AvatarFallback>
+                  <span className='sr-only'>
+                    {chat.is_group
+                      ? typeof chat.name === 'string'
+                        ? chat.name
+                        : 'Unnamed Group'
+                      : typeof chat.name === 'object'
+                      ? getOtherUserName(chat.name, user?.username)
+                      : chat.name}
+                  </span>
+                </AvatarFallback>
               </Avatar>
               <div className='flex flex-col max-w-28'>
                 <div className='flex items-center gap-2'>

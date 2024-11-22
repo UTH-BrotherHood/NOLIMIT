@@ -8,6 +8,7 @@ import { ChatInput } from '@/components/ui/message/chat-input'
 import { ConversationType } from '@/schemaValidations/conversation.schema'
 import useChatStore from '@/hooks/useChatStore'
 import { useRef } from 'react'
+import Link from 'next/link'
 
 interface ChatBottombarProps {
   onSendMessage: (message: { message_content: string; message_type: 'text' | 'image' | 'file' }) => void
@@ -64,23 +65,49 @@ export default function ChatBottombar({ onSendMessage, isLoading, selectedUser }
       <div className='flex'>
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant='ghost' size='icon' className='h-9 w-9 shrink-0'>
+            <Link href='#' className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-9 w-9', 'shrink-0')}>
               <PlusCircle size={22} className='text-muted-foreground' />
-            </Button>
+            </Link>
           </PopoverTrigger>
           <PopoverContent side='top' className='w-full p-2'>
-            <div className='flex gap-2'>
-              <Button variant='ghost' size='icon' className='h-9 w-9 shrink-0'>
+            {input.trim() ? (
+              <div className='flex gap-2'>
+                <Link
+                  href='#'
+                  className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-9 w-9', 'shrink-0')}
+                >
+                  <Mic size={22} className='text-muted-foreground' />
+                </Link>
+                {BottombarIcons.map((icon, index) => (
+                  <Link
+                    key={index}
+                    href='#'
+                    className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-9 w-9', 'shrink-0')}
+                  >
+                    <icon.icon size={22} className='text-muted-foreground' />
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <Link href='#' className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-9 w-9', 'shrink-0')}>
                 <Mic size={22} className='text-muted-foreground' />
-              </Button>
-              {BottombarIcons.map((icon, index) => (
-                <Button key={index} variant='ghost' size='icon' className='h-9 w-9 shrink-0'>
-                  <icon.icon size={22} className='text-muted-foreground' />
-                </Button>
-              ))}
-            </div>
+              </Link>
+            )}
           </PopoverContent>
         </Popover>
+        {!input.trim() && (
+          <div className='flex'>
+            {BottombarIcons.map((icon, index) => (
+              <Link
+                key={index}
+                href='#'
+                className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-9 w-9', 'shrink-0')}
+              >
+                <icon.icon size={22} className='text-muted-foreground' />
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
 
       <AnimatePresence initial={false}>
