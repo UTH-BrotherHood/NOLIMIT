@@ -89,7 +89,7 @@ export default function SidebarDashboard() {
 
   return (
     <Sidebar animate open={openSidebar} setOpen={setOpenSidebar}>
-      <SidebarBody className='justify-between gap-10 fixed left-0 top-0 bottom-0'>
+      <SidebarBody className='justify-between gap-10 fixed left-0 top-0 bottom-0 z-50'>
         <div className='flex flex-col flex-1 items-center overflow-y-auto overflow-x-hidden'>
           <div>
             <LogoIcon />
