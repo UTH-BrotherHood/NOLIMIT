@@ -7,6 +7,16 @@ export const MessageType = {
   FILE: 'file'
 } as const
 
+// Schema cho sender
+export const SenderSchema = z.object({
+  _id: z.string(),
+  username: z.string(),
+  email: z.string().email(),
+  avatar_url: z.string()
+})
+
+export type SenderType = z.infer<typeof SenderSchema>
+
 // Schema cho new message request body
 export const NewMessageSchema = z.object({
   message_content: z.string().min(1, 'Message content is required'),
@@ -20,13 +30,13 @@ export type NewMessageType = z.infer<typeof NewMessageSchema>
 export const MessageSchema = z.object({
   _id: z.string(),
   conversation_id: z.string(),
-  sender_id: z.string(),
   message_content: z.string(),
   message_type: z.enum([MessageType.TEXT, MessageType.IMAGE, MessageType.FILE]),
   is_read: z.boolean(),
-  read_by: z.array(z.string()),
   created_at: z.string(),
-  updated_at: z.string()
+  updated_at: z.string(),
+  sender: SenderSchema,
+  read_by_users: z.array(z.string())
 })
 
 // Type cho message

@@ -3,6 +3,29 @@ import { NewMessageSchema } from '@/schemaValidations/message.schema'
 import messageApiRequest from '@/apiRequests/message'
 import { HttpError } from '@/lib/http'
 
+// GET /api/conversation/[conversationId]/messages
+export async function GET(request: NextRequest, { params }: { params: { conversationId: string } }) {
+  try {
+    const { conversationId } = params
+    const { payload } = await messageApiRequest.getMessages(conversationId)
+    return Response.json(payload)
+  } catch (error) {
+    if (error instanceof HttpError) {
+      return Response.json(error.payload, {
+        status: error.status
+      })
+    }
+    return Response.json(
+      {
+        message: 'Có lỗi xảy ra khi lấy tin nhắn'
+      },
+      {
+        status: 500
+      }
+    )
+  }
+}
+
 // POST /api/conversation/[conversationId]/messages
 export async function POST(request: NextRequest, { params }: { params: { conversationId: string } }) {
   try {
