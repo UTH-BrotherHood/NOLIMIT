@@ -25,9 +25,9 @@ interface SidebarProps {
 }
 
 // Thêm hàm helper để lấy tên người dùng còn lại
-const getOtherUserName = (conversationName: Record<string, string>, currentUserId: string | undefined) => {
-  if (!currentUserId) return ''
-  const otherUser = Object.entries(conversationName).find(([id]) => id !== currentUserId)
+const getOtherUserName = (conversationName: Record<string, string>, currentName: string | undefined) => {
+  if (!currentName) return ''
+  const otherUser = Object.entries(conversationName).find(([name]) => name !== currentName)
   return otherUser ? otherUser[1] : ''
 }
 
@@ -104,7 +104,7 @@ export function Sidebar({ chats, isCollapsed, isMobile, onUserSelect }: SidebarP
                       ? chat.name
                       : 'Unnamed Group'
                     : typeof chat.name === 'object'
-                    ? getOtherUserName(chat.name, user?._id)
+                    ? getOtherUserName(chat.name, user?.username)
                     : chat.name}
                 </TooltipContent>
               </Tooltip>
@@ -146,7 +146,7 @@ export function Sidebar({ chats, isCollapsed, isMobile, onUserSelect }: SidebarP
                         ? chat.name
                         : 'Unnamed Group'
                       : typeof chat.name === 'object'
-                      ? getOtherUserName(chat.name, user?._id)
+                      ? getOtherUserName(chat.name, user?.username)
                       : chat.name}
                   </span>
                   {chat.is_group && <span className='bg-primary text-white text-xs rounded-full px-1'>Group</span>}
