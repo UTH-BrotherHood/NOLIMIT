@@ -9,6 +9,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ConversationType } from '@/schemaValidations/conversation.schema'
 import { useContext } from 'react'
 import { UserContext } from '@/contexts/profileContext'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import { CreateGroupDialog, SendMessageDialog } from '@/containers/message/chat-dialogs'
 
 interface SidebarProps {
   isCollapsed: boolean
@@ -46,13 +48,23 @@ export function Sidebar({ chats, isCollapsed, isMobile, onUserSelect }: SidebarP
           </div>
 
           <div>
-            <Link href='#' className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-9 w-9')}>
-              <MoreHorizontal size={20} />
-            </Link>
+            <Dialog>
+              <DialogTrigger asChild>
+                <button className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-9 w-9')}>
+                  <MoreHorizontal size={20} />
+                </button>
+              </DialogTrigger>
+              <CreateGroupDialog />
+            </Dialog>
 
-            <Link href='#' className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-9 w-9')}>
-              <SquarePen size={20} />
-            </Link>
+            <Dialog>
+              <DialogTrigger asChild>
+                <button className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-9 w-9')}>
+                  <SquarePen size={20} />
+                </button>
+              </DialogTrigger>
+              <SendMessageDialog />
+            </Dialog>
           </div>
         </div>
       )}
