@@ -83,7 +83,13 @@ export function Sidebar({ chats, isCollapsed, isMobile, onUserSelect }: SidebarP
                     }
                   >
                     <Avatar className='flex justify-center items-center'>
-                      <AvatarImage src='/default-avatar.png' alt='avatar' className='w-10 h-10' />
+                      <AvatarImage
+                        src={
+                          'https://static.minhtuanmobile.com/uploads/editer/images/truyen-cam-hung-voi-hinh-nen-chu-chuot-dau-bep-17.webp'
+                        }
+                        alt='avatar'
+                        className='w-10 h-10'
+                      />
                     </Avatar>
                     {chat.is_group && (
                       <div className='absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full px-1'>
@@ -126,7 +132,11 @@ export function Sidebar({ chats, isCollapsed, isMobile, onUserSelect }: SidebarP
               }
             >
               <Avatar className='flex justify-center items-center'>
-                <AvatarImage src='/default-avatar.png' alt='avatar' className='w-10 h-10' />
+                <AvatarImage
+                  src='https://static.minhtuanmobile.com/uploads/editer/images/truyen-cam-hung-voi-hinh-nen-chu-chuot-dau-bep-17.webp'
+                  alt='avatar'
+                  className='w-10 h-10'
+                />
               </Avatar>
               <div className='flex flex-col max-w-28'>
                 <div className='flex items-center gap-2'>

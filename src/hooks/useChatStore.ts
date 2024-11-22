@@ -22,12 +22,13 @@ interface Actions {
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void
   setMessages: (messages: MessageResType[]) => void
   addMessage: (message: MessageResType) => void
+  handleNewMessage: (message: MessageResType) => void
   setSelectedConversation: (conversation: ConversationType | null) => void
   setIsLoading: (isLoading: boolean) => void
   setError: (error: string | null) => void
 }
 
-const useChatStore = create<State & Actions>()((set) => ({
+const useChatStore = create<State & Actions>()((set, get) => ({
   // State
   input: '',
   messages: [],
@@ -47,6 +48,16 @@ const useChatStore = create<State & Actions>()((set) => ({
     set((state) => ({
       messages: [...state.messages, message]
     })),
+
+  handleNewMessage: (message: MessageResType) => {
+    const { selectedConversation, messages } = get()
+    // Chỉ thêm tin nhắn nếu thuộc về conversation hiện tại
+    if (selectedConversation?._id === message.conversation_id) {
+      set({
+        messages: [...messages, message]
+      })
+    }
+  },
 
   setSelectedConversation: (conversation) => set({ selectedConversation: conversation }),
 
