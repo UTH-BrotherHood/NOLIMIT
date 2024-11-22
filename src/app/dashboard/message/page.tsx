@@ -1,3 +1,4 @@
+import TestMessageApi from '@/app/dashboard/message/testCallapi'
 import { ChatLayout } from '@/containers/message/chat-layout'
 import { cookies } from 'next/headers'
 
@@ -7,7 +8,8 @@ export default function Home() {
 
   return (
     <div className='w-full h-screen'>
-      <ChatLayout defaultLayout={defaultLayout} navCollapsedSize={8} />
+      <TestMessageApi />
+      {/* <ChatLayout defaultLayout={defaultLayout} navCollapsedSize={8} /> */}
     </div>
   )
 }
