@@ -1,50 +1,58 @@
-import { Message, userData, UserData, Users } from '@/app/dashboard/message/data'
+import { MessageResType } from '@/schemaValidations/message.schema'
 import { create } from 'zustand'
+import { ConversationType } from '@/schemaValidations/conversation.schema'
 
-export interface Example {
-  name: string
-  url: string
+// Interface cho việc tạo tin nhắn mới
+interface NewMessageType {
+  conversation_id: string
+  message_content: string
+  message_type: 'text' | 'image' | 'file'
 }
 
 interface State {
   input: string
-  messages: Message[]
-  hasInitialAIResponse: boolean
-  hasInitialResponse: boolean
+  messages: MessageResType[]
+  selectedConversation: ConversationType | null
+  isLoading: boolean
+  error: string | null
 }
 
 interface Actions {
-  selectedUser: UserData
   setInput: (input: string) => void
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void
-  setMessages: (fn: (messages: Message[]) => Message[]) => void
-  setHasInitialAIResponse: (hasInitialAIResponse: boolean) => void
-  setHasInitialResponse: (hasInitialResponse: boolean) => void
+  setMessages: (messages: MessageResType[]) => void
+  addMessage: (message: MessageResType) => void
+  setSelectedConversation: (conversation: ConversationType | null) => void
+  setIsLoading: (isLoading: boolean) => void
+  setError: (error: string | null) => void
 }
 
 const useChatStore = create<State & Actions>()((set) => ({
-  selectedUser: Users[4],
-
-  examples: [
-    { name: 'Messenger example', url: '/' },
-    { name: 'Chatbot example', url: '/chatbot' },
-    { name: 'Chatbot2 example', url: '/chatbot2' }
-  ],
-
+  // State
   input: '',
+  messages: [],
+  selectedConversation: null,
+  isLoading: false,
+  error: null,
 
+  // Actions
   setInput: (input) => set({ input }),
+
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) =>
     set({ input: e.target.value }),
 
-  messages: userData[0].messages,
-  setMessages: (fn) => set(({ messages }) => ({ messages: fn(messages) })),
+  setMessages: (messages: MessageResType[]) => set({ messages }),
 
-  hasInitialAIResponse: false,
-  setHasInitialAIResponse: (hasInitialAIResponse) => set({ hasInitialAIResponse }),
+  addMessage: (message: MessageResType) =>
+    set((state) => ({
+      messages: [...state.messages, message]
+    })),
 
-  hasInitialResponse: false,
-  setHasInitialResponse: (hasInitialResponse) => set({ hasInitialResponse })
+  setSelectedConversation: (conversation) => set({ selectedConversation: conversation }),
+
+  setIsLoading: (isLoading) => set({ isLoading }),
+
+  setError: (error) => set({ error })
 }))
 
 export default useChatStore

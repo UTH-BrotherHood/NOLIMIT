@@ -8,8 +8,8 @@ export default function Home() {
 
   return (
     <div className='w-full h-screen'>
-      <TestMessageApi />
-      {/* <ChatLayout defaultLayout={defaultLayout} navCollapsedSize={8} /> */}
+      {/* <TestMessageApi /> */}
+      <ChatLayout defaultLayout={defaultLayout} navCollapsedSize={8} />
     </div>
   )
 }

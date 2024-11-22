@@ -1,10 +1,14 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { cn } from '@/lib/utils'
 import { Chat } from './chat'
-import { User, userData } from '@/app/dashboard/message/data'
+import { useGetAllConversationsMutation } from '@/queries/useMessage'
+import { useGetAllMessagesMutation } from '@/queries/useMessage'
+import { ConversationType } from '@/schemaValidations/conversation.schema'
+import { UserContext } from '@/contexts/profileContext'
+import { MessageResType, MessageType } from '@/schemaValidations/message.schema'
 import { Sidebar } from '@/containers/message/sidebar-message'
 
 interface ChatLayoutProps {
@@ -18,13 +22,34 @@ export function ChatLayout({
   defaultCollapsed = false,
   navCollapsedSize
 }: ChatLayoutProps) {
+  const conversationsMutation = useGetAllConversationsMutation()
+  const messagesMutation = useGetAllMessagesMutation()
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed)
-  const [selectedUser, setSelectedUser] = React.useState(userData[0])
+  const [selectedConversation, setSelectedConversation] = React.useState<ConversationType | undefined>(undefined)
+  const [conversations, setConversations] = React.useState<ConversationType[]>([])
+  const [messages, setMessages] = React.useState<MessageResType[]>([])
   const [isMobile, setIsMobile] = useState(false)
+  const { user } = useContext(UserContext) || {}
 
-  const handleUserSelect = (user: User) => {
-    setSelectedUser(user)
+  const handleConversationSelect = async (conversation: ConversationType) => {
+    setSelectedConversation(conversation)
+    try {
+      const response = await messagesMutation.mutateAsync(conversation._id)
+      if (response.payload?.data) {
+        setMessages(response.payload.data as MessageResType[])
+      }
+    } catch (error) {
+      console.error('Error fetching messages:', error)
+    }
   }
+
+  useEffect(() => {
+    const fetchConversations = async () => {
+      const res = await conversationsMutation.mutateAsync()
+      setConversations(res.payload.data)
+    }
+    fetchConversations()
+  }, [])
 
   useEffect(() => {
     const checkScreenWidth = () => {
@@ -65,21 +90,21 @@ export function ChatLayout({
       >
         <Sidebar
           isCollapsed={isCollapsed || isMobile}
-          chats={userData.map((user) => ({
-            id: user.id,
-            name: user.name,
-            messages: user.messages ?? [],
-            avatar: user.avatar,
-            variant: selectedUser.id === user.id ? 'secondary' : 'ghost'
+          chats={conversations.map((conversation) => ({
+            id: conversation._id,
+            name: conversation.conversation_name,
+            variant: selectedConversation?._id === conversation._id ? 'secondary' : 'ghost',
+            is_group: conversation.is_group,
+            currentUserId: user?._id
           }))}
           isMobile={isMobile}
-          onUserSelect={handleUserSelect}
-          selectedUserId={selectedUser.id} // Thêm prop mới này
+          onUserSelect={handleConversationSelect}
+          selectedUserId={selectedConversation?._id}
         />
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-        <Chat selectedUser={selectedUser} isMobile={isMobile} />
+        <Chat selectedUser={selectedConversation!} isMobile={isMobile} messages={messages} />
       </ResizablePanel>
     </ResizablePanelGroup>
   )

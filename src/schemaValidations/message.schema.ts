@@ -40,7 +40,23 @@ export const MessageSchema = z.object({
 })
 
 // Type cho message
-export type MessageType = z.infer<typeof MessageSchema>
+export interface MessageResType {
+  _id: string
+  conversation_id: string
+  message_content: string
+  message_type: 'text' | 'image' | 'file'
+  sender?: {
+    _id: string
+    username: string
+    email: string
+    avatar_url: string
+  }
+  sender_id?: string
+  is_read: boolean
+  read_by_users: string[]
+  created_at: string
+  updated_at: string
+}
 
 // Schema cho response API khi get messages
 export const MessageResponseSchema = z.object({
