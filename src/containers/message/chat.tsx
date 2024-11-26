@@ -12,6 +12,7 @@ import { useNewMessageMutation } from '@/queries/useMessage'
 import { useSocket } from '@/hooks/useSocket'
 import { UserContext } from '@/contexts/profileContext'
 import { MessageResType } from '@/schemaValidations/message.schema'
+import { Loader2 } from 'lucide-react'
 
 export function Chat() {
   const { conversation_id } = useParams()
@@ -40,7 +41,7 @@ export function Chat() {
   const { data: conversationData, isLoading: isLoadingConversation } = useQuery({
     queryKey: ['conversation', currentConversationId],
     queryFn: () => conversationApiRequest.getConversationById(currentConversationId as string),
-    enabled: !!currentConversationId,
+    enabled: !!currentConversationId && !selectedConversation,
     staleTime: 30000,
     refetchOnWindowFocus: false
   })
@@ -168,7 +169,7 @@ export function Chat() {
   if (isLoadingConversation || isLoadingMessages) {
     return (
       <div className='flex items-center justify-center h-full'>
-        <p className='text-muted-foreground'>Đang tải...</p>
+        <Loader2 className='w-4 h-4 animate-spin' />
       </div>
     )
   }
