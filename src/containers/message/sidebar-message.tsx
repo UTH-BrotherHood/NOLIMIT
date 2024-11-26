@@ -11,6 +11,8 @@ import { useContext } from 'react'
 import { UserContext } from '@/contexts/profileContext'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { CreateGroupDialog, SendMessageDialog } from '@/containers/message/chat-dialogs'
+import { useRouter } from 'next/navigation'
+import useChatStore from '@/hooks/useChatStore'
 
 interface SidebarProps {
   isCollapsed: boolean
@@ -33,12 +35,44 @@ const getOtherUserName = (conversationName: Record<string, string>, currentName:
   return otherUser ? otherUser[1] : ''
 }
 
-export function Sidebar({ chats, isCollapsed, isMobile, onUserSelect }: SidebarProps) {
+export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
   const { user } = useContext(UserContext) || {}
+  const router = useRouter()
+  const { setSelectedConversation, setCurrentConversationId } = useChatStore()
+
+  const handleSelectConversation = (chat: {
+    id: string
+    name: string | Record<string, string>
+    is_group: boolean
+    currentUserId?: string
+  }) => {
+    // Ngăn chặn hành vi mặc định
+    const conversation = {
+      _id: chat.id,
+      participants: {
+        name: typeof chat.name === 'string' ? chat.name : getOtherUserName(chat.name, user?.username),
+        avatar_url: '',
+        status: 'offline'
+      },
+      conversation_name: typeof chat.name === 'string' ? chat.name : getOtherUserName(chat.name, user?.username),
+      last_message: {
+        senderDetails: {}
+      },
+      is_group: chat.is_group,
+      creator: chat.currentUserId || '',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+
+    setSelectedConversation(conversation)
+    setCurrentConversationId(chat.id)
+    router.push(`/dashboard/message/${chat.id}`)
+  }
+
   return (
     <div
       data-collapsed={isCollapsed}
-      className='relative group flex flex-col h-full bg-muted/10 dark:bg-muted/20 gap-4 p-2 data-[collapsed=true]:p-2 '
+      className='relative group flex flex-col h-full bg-muted/10 dark:bg-muted/20 gap-4 p-2 data-[collapsed=true]:p-2'
     >
       {!isCollapsed && (
         <div className='flex justify-between p-2 items-center'>
@@ -68,31 +102,20 @@ export function Sidebar({ chats, isCollapsed, isMobile, onUserSelect }: SidebarP
           </div>
         </div>
       )}
-      <nav className=' grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2'>
+      <nav className='grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2'>
         {chats.map((chat) =>
           isCollapsed ? (
             <TooltipProvider key={chat.id}>
               <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>
-                  <Link
-                    href='#'
+                  <button
                     className={cn(
                       buttonVariants({ variant: chat.variant, size: 'icon' }),
                       'h-11 w-11 md:h-16 md:w-16 relative',
                       chat.variant === 'secondary' &&
                         'dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white'
                     )}
-                    onClick={() =>
-                      onUserSelect({
-                        _id: chat.id,
-                        conversation_name: chat.name,
-                        is_group: chat.is_group,
-                        creator: chat.currentUserId || '',
-                        created_at: '',
-                        updated_at: '',
-                        role: 'member'
-                      })
-                    }
+                    onClick={() => handleSelectConversation(chat)}
                   >
                     <Avatar className='flex justify-center items-center'>
                       <AvatarImage
@@ -119,7 +142,7 @@ export function Sidebar({ chats, isCollapsed, isMobile, onUserSelect }: SidebarP
                         Group
                       </div>
                     )}
-                  </Link>
+                  </button>
                 </TooltipTrigger>
                 <TooltipContent side='right' className='flex items-center gap-4'>
                   {chat.is_group
@@ -133,26 +156,15 @@ export function Sidebar({ chats, isCollapsed, isMobile, onUserSelect }: SidebarP
               </Tooltip>
             </TooltipProvider>
           ) : (
-            <Link
+            <button
               key={chat.id}
-              href='#'
               className={cn(
                 buttonVariants({ variant: chat.variant, size: 'lg' }),
                 chat.variant === 'secondary' &&
                   'dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white shrink',
-                'justify-start gap-4 relative'
+                'justify-start gap-4 relative w-full'
               )}
-              onClick={() =>
-                onUserSelect({
-                  _id: chat.id,
-                  conversation_name: chat.name,
-                  is_group: chat.is_group,
-                  creator: chat.currentUserId || '',
-                  created_at: '',
-                  updated_at: '',
-                  role: 'member'
-                })
-              }
+              onClick={() => handleSelectConversation(chat)}
             >
               <Avatar className='flex justify-center items-center'>
                 <AvatarImage
@@ -188,7 +200,7 @@ export function Sidebar({ chats, isCollapsed, isMobile, onUserSelect }: SidebarP
                   {chat.is_group && <span className='bg-primary text-white text-xs rounded-full px-1'>Group</span>}
                 </div>
               </div>
-            </Link>
+            </button>
           )
         )}
       </nav>

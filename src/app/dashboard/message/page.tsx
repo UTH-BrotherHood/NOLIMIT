@@ -1,15 +1,7 @@
-import TestMessageApi from '@/app/dashboard/message/testCallapi'
-import { ChatLayout } from '@/containers/message/chat-layout'
-import { cookies } from 'next/headers'
-
-export default function Home() {
-  const layout = cookies().get('react-resizable-panels:layout')
-  const defaultLayout = layout ? JSON.parse(layout.value) : undefined
-
+export default function MessagePage() {
   return (
-    <div className='w-full h-screen'>
-      {/* <TestMessageApi /> */}
-      <ChatLayout defaultLayout={defaultLayout} navCollapsedSize={8} />
+    <div className='w-full h-screen flex items-center justify-center'>
+      <p className='text-muted-foreground'>Vui lòng chọn một cuộc trò chuyện để bắt đầu</p>
     </div>
   )
 }

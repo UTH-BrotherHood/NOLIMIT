@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers'
-import accountApiRequest from '@/apiRequests/account'
+import conversationApiRequest from '@/apiRequests/conversation'
 
 export async function GET(request: Request) {
   const cookieStore = cookies()
@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     )
   }
   try {
-    const { payload } = await accountApiRequest.sGetAllConversations(access_token)
+    const { payload } = await conversationApiRequest.sGetAllConversations(access_token)
     return Response.json(payload)
   } catch (error) {
     return Response.json(

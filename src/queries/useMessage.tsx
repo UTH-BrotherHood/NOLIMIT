@@ -1,11 +1,11 @@
-import accountApiRequest from '@/apiRequests/account'
+import conversationApiRequest from '@/apiRequests/conversation'
 import messageApiRequest from '@/apiRequests/message'
 import { NewMessageType } from '@/schemaValidations/message.schema'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 export const useGetAllConversationsMutation = () => {
   return useMutation({
-    mutationFn: accountApiRequest.getAllConversations
+    mutationFn: conversationApiRequest.getAllConversations
   })
 }
 

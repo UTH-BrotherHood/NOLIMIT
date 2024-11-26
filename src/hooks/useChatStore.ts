@@ -13,6 +13,7 @@ interface State {
   input: string
   messages: MessageResType[]
   selectedConversation: ConversationType | null
+  currentConversationId: string | null
   isLoading: boolean
   error: string | null
 }
@@ -26,6 +27,7 @@ interface Actions {
   setSelectedConversation: (conversation: ConversationType | null) => void
   setIsLoading: (isLoading: boolean) => void
   setError: (error: string | null) => void
+  setCurrentConversationId: (id: string | null) => void
 }
 
 const useChatStore = create<State & Actions>()((set, get) => ({
@@ -33,6 +35,7 @@ const useChatStore = create<State & Actions>()((set, get) => ({
   input: '',
   messages: [],
   selectedConversation: null,
+  currentConversationId: null,
   isLoading: false,
   error: null,
 
@@ -63,7 +66,9 @@ const useChatStore = create<State & Actions>()((set, get) => ({
 
   setIsLoading: (isLoading) => set({ isLoading }),
 
-  setError: (error) => set({ error })
+  setError: (error) => set({ error }),
+
+  setCurrentConversationId: (id) => set({ currentConversationId: id })
 }))
 
 export default useChatStore
