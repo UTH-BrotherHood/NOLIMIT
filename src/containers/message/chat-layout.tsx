@@ -6,18 +6,21 @@ import { cn } from '@/lib/utils'
 import { Chat } from './chat'
 import { useGetAllConversationsMutation } from '@/queries/useMessage'
 import { useGetAllMessagesMutation } from '@/queries/useMessage'
-import { ConversationType } from '@/schemaValidations/conversation.schema'
+import { ConversationType, LastMessageType } from '@/schemaValidations/conversation.schema'
 import { UserContext } from '@/contexts/profileContext'
 import { MessageResType, MessageType } from '@/schemaValidations/message.schema'
 import { Sidebar } from '@/containers/message/sidebar-message'
+import { useRouter } from 'next/navigation'
 
 interface ChatLayoutProps {
+  children: React.ReactNode
   defaultLayout: number[] | undefined
   defaultCollapsed?: boolean
   navCollapsedSize: number
 }
 
 export function ChatLayout({
+  children,
   defaultLayout = [320, 480],
   defaultCollapsed = false,
   navCollapsedSize
@@ -30,7 +33,7 @@ export function ChatLayout({
   const [messages, setMessages] = React.useState<MessageResType[]>([])
   const [isMobile, setIsMobile] = useState(false)
   const { user } = useContext(UserContext) || {}
-
+  const router = useRouter()
   const handleConversationSelect = async (conversation: ConversationType) => {
     setSelectedConversation(conversation)
     try {
@@ -38,6 +41,7 @@ export function ChatLayout({
       if (response.payload?.data) {
         setMessages(response.payload.data as MessageResType[])
       }
+      router.push(`/dashboard/message/${conversation._id}`)
     } catch (error) {
       console.error('Error fetching messages:', error)
     }
@@ -95,7 +99,8 @@ export function ChatLayout({
             name: conversation.conversation_name,
             variant: selectedConversation?._id === conversation._id ? 'secondary' : 'ghost',
             is_group: conversation.is_group,
-            currentUserId: user?._id
+            currentUserId: user?._id,
+            last_message: conversation.last_message as LastMessageType
           }))}
           isMobile={isMobile}
           onUserSelect={handleConversationSelect}
@@ -104,7 +109,7 @@ export function ChatLayout({
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-        <Chat selectedUser={selectedConversation!} isMobile={isMobile} messages={messages} />
+        {children}
       </ResizablePanel>
     </ResizablePanelGroup>
   )

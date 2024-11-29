@@ -8,5 +8,4 @@ const messageApiRequest = {
   getMessages: (conversationId: string) =>
     http.get<MessageResponseType>(`/api/v1/conversation/${conversationId}/messages`)
 }
-
 export default messageApiRequest

@@ -1,44 +1,86 @@
-import ChatTopbar from './chat-topbar'
-import { ChatList } from './chat-list'
-import React, { useEffect } from 'react'
+'use client'
+
+import { useParams } from 'next/navigation'
+import { useEffect, useContext } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import messageApiRequest from '@/apiRequests/message'
+import conversationApiRequest from '@/apiRequests/conversation'
 import useChatStore from '@/hooks/useChatStore'
-import { ConversationType } from '@/schemaValidations/conversation.schema'
-import { MessageResType } from '@/schemaValidations/message.schema'
+import { ChatList } from './chat-list'
+import ChatTopbar from './chat-topbar'
 import { useNewMessageMutation } from '@/queries/useMessage'
-import { useContext } from 'react'
-import { UserContext } from '@/contexts/profileContext'
 import { useSocket } from '@/hooks/useSocket'
+import { UserContext } from '@/contexts/profileContext'
+import { MessageResType } from '@/schemaValidations/message.schema'
+import { Loader2 } from 'lucide-react'
 
-interface ChatProps {
-  selectedUser: ConversationType
-  isMobile: boolean
-  messages: MessageResType[]
-}
-
-export function Chat({ selectedUser, isMobile, messages: initialMessages }: ChatProps) {
-  const { setMessages, addMessage, setIsLoading, setError } = useChatStore()
+export function Chat() {
+  const { conversation_id } = useParams()
+  const {
+    setMessages,
+    addMessage,
+    selectedConversation,
+    setSelectedConversation,
+    currentConversationId,
+    setCurrentConversationId,
+    setIsLoading,
+    setError
+  } = useChatStore()
   const createMessageMutation = useNewMessageMutation()
-  const { user } = useContext(UserContext) || {}
   const socket = useSocket()
+  const { user } = useContext(UserContext) || {}
 
+  // Set conversation_id khi component mount
   useEffect(() => {
-    setMessages(initialMessages)
-  }, [initialMessages, setMessages])
+    if (conversation_id) {
+      setCurrentConversationId(conversation_id as string)
+    }
+  }, [conversation_id, setCurrentConversationId])
 
+  // Query để lấy thông tin conversation
+  const { data: conversationData, isLoading: isLoadingConversation } = useQuery({
+    queryKey: ['conversation', currentConversationId],
+    queryFn: () => conversationApiRequest.getConversationById(currentConversationId as string),
+    enabled: !!currentConversationId && !selectedConversation,
+    staleTime: 30000,
+    refetchOnWindowFocus: false
+  })
+
+  // Query để lấy tin nhắn ban đầu
+  const { data: messagesData, isLoading: isLoadingMessages } = useQuery({
+    queryKey: ['messages', currentConversationId],
+    queryFn: () => messageApiRequest.getMessages(currentConversationId as string),
+    enabled: !!currentConversationId,
+    staleTime: Infinity, // Không tự động fetch lại
+    refetchOnWindowFocus: false
+  })
+
+  // Cập nhật selectedConversation khi có dữ liệu conversation
   useEffect(() => {
-    if (!socket || !selectedUser) return
+    if (conversationData?.payload?.data?.[0]) {
+      setSelectedConversation(conversationData.payload.data[0])
+    }
+  }, [conversationData, setSelectedConversation])
+
+  // Cập nhật messages ban đầu
+  useEffect(() => {
+    if (messagesData?.payload?.data) {
+      setMessages(messagesData.payload.data)
+    }
+  }, [messagesData?.payload?.data, setMessages])
+
+  // Xử lý socket events
+  useEffect(() => {
+    if (!socket || !selectedConversation) return
 
     const handleNewMessage = (data: any) => {
       console.log('Socket received data:', data)
 
-      // Kiểm tra xem tin nhắn có thuộc về conversation hiện tại không
-      if (data.conversation_id === selectedUser._id) {
+      if (data.conversation_id === selectedConversation._id) {
         console.log('Message belongs to current conversation')
 
-        // Nếu data.message tồn tại, sử dụng nó, nếu không sử dụng data trực tiếp
         const messageData = data.message || data
 
-        // Tạo tin nhắn mới với format chuẩn
         const newMessage: MessageResType = {
           _id: messageData._id || Date.now().toString(),
           conversation_id: messageData.conversation_id,
@@ -57,50 +99,33 @@ export function Chat({ selectedUser, isMobile, messages: initialMessages }: Chat
         }
 
         console.log('Formatted new message:', newMessage)
-
-        // Thêm tin nhắn vào state
         addMessage(newMessage)
       }
     }
 
-    console.log('Setting up socket listener for conversation:', selectedUser._id)
+    console.log('Setting up socket listener for conversation:', selectedConversation._id)
+    socket.emit('join_conversation', selectedConversation._id)
     socket.on('new_message', handleNewMessage)
 
     return () => {
       console.log('Cleaning up socket listener')
+      socket.emit('leave_conversation', selectedConversation._id)
       socket.off('new_message', handleNewMessage)
     }
-  }, [socket, selectedUser, addMessage])
+  }, [socket, selectedConversation, addMessage])
 
-  useEffect(() => {
-    if (!socket || !selectedUser?._id) return
-
-    console.log('Joining conversation:', selectedUser._id)
-    socket.emit('join_conversation', selectedUser._id)
-
-    return () => {
-      if (selectedUser?._id) {
-        console.log('Leaving conversation:', selectedUser._id)
-        socket.emit('leave_conversation', selectedUser._id)
-      }
-    }
-  }, [socket, selectedUser])
-
-  const sendMessage = async (newMessage: { message_content: string; message_type: 'text' | 'image' | 'file' }) => {
-    if (!selectedUser?._id || !user?._id) {
-      console.log('Missing required data:', { selectedUser, user })
-      return
-    }
+  const handleSendMessage = async (message: { message_content: string; message_type: 'text' | 'image' | 'file' }) => {
+    if (!selectedConversation || !user?._id) return
 
     try {
       setIsLoading(true)
 
-      // Tạo tin nhắn tạm thời với nội dung gốc
+      // Tạo tin nhắn tạm thời
       const tempMessage: MessageResType = {
         _id: Date.now().toString(),
-        conversation_id: selectedUser._id,
-        message_content: newMessage.message_content,
-        message_type: newMessage.message_type,
+        conversation_id: selectedConversation._id,
+        message_content: message.message_content,
+        message_type: message.message_type,
         sender: {
           _id: user._id,
           username: user.username,
@@ -118,11 +143,11 @@ export function Chat({ selectedUser, isMobile, messages: initialMessages }: Chat
 
       // Gửi tin nhắn lên server
       await createMessageMutation.mutateAsync({
-        conversationId: selectedUser._id,
-        body: newMessage
+        conversationId: selectedConversation._id,
+        body: message
       })
 
-      // Emit socket event với đầy đủ thông tin
+      // Emit socket event
       if (socket) {
         console.log('Emitting socket message:', tempMessage)
         socket.emit('send_message', {
@@ -141,18 +166,26 @@ export function Chat({ selectedUser, isMobile, messages: initialMessages }: Chat
     }
   }
 
-  if (!selectedUser) {
+  if (isLoadingConversation || isLoadingMessages) {
     return (
       <div className='flex items-center justify-center h-full'>
-        <p className='text-muted-foreground'>Select a conversation to start chatting</p>
+        <Loader2 className='w-4 h-4 animate-spin' />
+      </div>
+    )
+  }
+
+  if (!selectedConversation) {
+    return (
+      <div className='flex items-center justify-center h-full'>
+        <p className='text-muted-foreground'>Không tìm thấy cuộc trò chuyện</p>
       </div>
     )
   }
 
   return (
-    <div className='flex flex-col justify-between w-full h-full'>
-      <ChatTopbar selectedUser={selectedUser} />
-      <ChatList selectedUser={selectedUser} sendMessage={sendMessage} isMobile={isMobile} />
+    <div className='flex flex-col h-full'>
+      <ChatTopbar selectedUser={selectedConversation} />
+      <ChatList selectedUser={selectedConversation} sendMessage={handleSendMessage} isMobile={false} />
     </div>
   )
 }
