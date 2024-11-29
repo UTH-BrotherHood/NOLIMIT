@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 import { Chat } from './chat'
 import { useGetAllConversationsMutation } from '@/queries/useMessage'
 import { useGetAllMessagesMutation } from '@/queries/useMessage'
-import { ConversationType } from '@/schemaValidations/conversation.schema'
+import { ConversationType, LastMessageType } from '@/schemaValidations/conversation.schema'
 import { UserContext } from '@/contexts/profileContext'
 import { MessageResType, MessageType } from '@/schemaValidations/message.schema'
 import { Sidebar } from '@/containers/message/sidebar-message'
@@ -99,7 +99,8 @@ export function ChatLayout({
             name: conversation.conversation_name,
             variant: selectedConversation?._id === conversation._id ? 'secondary' : 'ghost',
             is_group: conversation.is_group,
-            currentUserId: user?._id
+            currentUserId: user?._id,
+            last_message: conversation.last_message as LastMessageType
           }))}
           isMobile={isMobile}
           onUserSelect={handleConversationSelect}

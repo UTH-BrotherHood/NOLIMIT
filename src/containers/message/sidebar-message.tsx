@@ -1,31 +1,38 @@
 'use client'
 
-import Link from 'next/link'
 import { MoreHorizontal, SquarePen } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { ConversationType } from '@/schemaValidations/conversation.schema'
+import { ConversationType, LastMessageType } from '@/schemaValidations/conversation.schema'
 import { useContext } from 'react'
 import { UserContext } from '@/contexts/profileContext'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
-import { CreateGroupDialog, SendMessageDialog } from '@/containers/message/chat-dialogs'
+import { CreateGroupDialog } from '@/containers/message/chat-dialogs'
 import { useRouter } from 'next/navigation'
 import useChatStore from '@/hooks/useChatStore'
+import { formatDistanceToNow } from 'date-fns'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 interface SidebarProps {
   isCollapsed: boolean
   chats: {
     id: string
-    name: string | Record<string, string>
+    name: string
     variant: 'secondary' | 'ghost'
     is_group: boolean
     currentUserId?: string
+    last_message: LastMessageType
   }[]
   onUserSelect: (conversation: ConversationType) => void
   isMobile: boolean
   selectedUserId?: string
+}
+
+function timeAgo(dateString: string) {
+  if (!dateString) return ''
+  return formatDistanceToNow(new Date(dateString), { addSuffix: true })
 }
 
 // Thêm hàm helper để lấy tên người dùng còn lại
@@ -46,7 +53,6 @@ export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
     is_group: boolean
     currentUserId?: string
   }) => {
-    // Ngăn chặn hành vi mặc định
     const conversation = {
       _id: chat.id,
       participants: {
@@ -97,113 +103,125 @@ export function Sidebar({ chats, isCollapsed, isMobile }: SidebarProps) {
                   <SquarePen size={20} />
                 </button>
               </DialogTrigger>
-              <SendMessageDialog />
             </Dialog>
           </div>
         </div>
       )}
-      <nav className='grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2'>
-        {chats.map((chat) =>
-          isCollapsed ? (
-            <TooltipProvider key={chat.id}>
-              <Tooltip delayDuration={0}>
-                <TooltipTrigger asChild>
-                  <button
-                    className={cn(
-                      buttonVariants({ variant: chat.variant, size: 'icon' }),
-                      'h-11 w-11 md:h-16 md:w-16 relative',
-                      chat.variant === 'secondary' &&
-                        'dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white'
-                    )}
-                    onClick={() => handleSelectConversation(chat)}
-                  >
-                    <Avatar className='flex justify-center items-center'>
-                      <AvatarImage
-                        src={
-                          'https://static.minhtuanmobile.com/uploads/editer/images/truyen-cam-hung-voi-hinh-nen-chu-chuot-dau-bep-17.webp'
-                        }
-                        alt='avatar'
-                        className='w-10 h-10'
-                      />
-                      <AvatarFallback>
-                        <span className='sr-only'>
-                          {chat.is_group
-                            ? typeof chat.name === 'string'
-                              ? chat.name
-                              : 'Unnamed Group'
-                            : typeof chat.name === 'object'
-                            ? getOtherUserName(chat.name, user?.username)
-                            : chat.name}
-                        </span>
-                      </AvatarFallback>
-                    </Avatar>
-                    {chat.is_group && (
-                      <div className='absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full px-1'>
-                        Group
+      <ScrollArea className='h-[calc(100vh-4rem)] group-[[data-collapsed=false]]:gap-4'>
+        <nav className='grid  px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2'>
+          {chats.map((chat) =>
+            isCollapsed ? (
+              <TooltipProvider key={chat.id}>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <button
+                      className={cn(
+                        buttonVariants({ variant: chat.variant, size: 'icon' }),
+                        'h-11 w-11 md:h-16 md:w-16 relative',
+                        chat.variant === 'secondary' &&
+                          'dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white'
+                      )}
+                      onClick={() => handleSelectConversation(chat)}
+                    >
+                      <Avatar className='flex justify-center items-center'>
+                        <AvatarImage
+                          src={
+                            'https://static.minhtuanmobile.com/uploads/editer/images/truyen-cam-hung-voi-hinh-nen-chu-chuot-dau-bep-17.webp'
+                          }
+                          alt='avatar'
+                          className='w-10 h-10'
+                        />
+                        <AvatarFallback>
+                          <span className='sr-only'>
+                            {chat.is_group
+                              ? typeof chat.name === 'string'
+                                ? chat.name
+                                : 'Unnamed Group'
+                              : typeof chat.name === 'object'
+                              ? getOtherUserName(chat.name, user?.username)
+                              : chat.name}
+                          </span>
+                        </AvatarFallback>
+                      </Avatar>
+                      {chat.is_group && (
+                        <div className='absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full px-1'>
+                          Group
+                        </div>
+                      )}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side='right' className='flex items-center gap-4'>
+                    {chat.is_group
+                      ? typeof chat.name === 'string'
+                        ? chat.name
+                        : 'Unnamed Group'
+                      : typeof chat.name === 'object'
+                      ? getOtherUserName(chat.name, user?.username)
+                      : chat.name}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ) : (
+              <button
+                key={chat.id}
+                className={cn(
+                  buttonVariants({ variant: chat.variant, size: 'lg' }),
+                  chat.variant === 'secondary' &&
+                    'dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white shrink',
+                  'justify-start gap-4 relative w-full rounded-md border py-10 mb-2'
+                )}
+                onClick={() => handleSelectConversation(chat)}
+              >
+                <Avatar className='flex justify-center items-center'>
+                  <AvatarImage
+                    src={
+                      'https://static.minhtuanmobile.com/uploads/editer/images/truyen-cam-hung-voi-hinh-nen-chu-chuot-dau-bep-17.webp'
+                    }
+                    alt='avatar'
+                    className='w-10 h-10'
+                  />
+                  <AvatarFallback>
+                    <span className='sr-only'>
+                      {chat.is_group
+                        ? typeof chat.name === 'string'
+                          ? chat.name
+                          : 'Unnamed Group'
+                        : typeof chat.name === 'object'
+                        ? getOtherUserName(chat.name, user?.username)
+                        : chat.name}
+                    </span>
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <div className='flex flex-col max-w-28'>
+                    <div className='flex flex-row justify-between'>
+                      <div className='flex items-center gap-2'>
+                        <span>{chat.name}</span>
+                        {chat.is_group && <span className='bg-primary text-white text-xs rounded-sm px-1'>Group</span>}
                       </div>
+                    </div>
+                  </div>
+
+                  <div className='text-left line-clamp-1 whitespace-nowrap text-ellipsis'>
+                    {chat.last_message && chat.last_message.message_content ? (
+                      <div>
+                        {chat.last_message.senderDetails._id === user?._id
+                          ? 'You'
+                          : chat.last_message.senderDetails.username}
+                        : {chat.last_message.message_content}
+                        <br />
+                      </div>
+                    ) : (
+                      <div className='text-gray-500'>There are no messages</div>
                     )}
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side='right' className='flex items-center gap-4'>
-                  {chat.is_group
-                    ? typeof chat.name === 'string'
-                      ? chat.name
-                      : 'Unnamed Group'
-                    : typeof chat.name === 'object'
-                    ? getOtherUserName(chat.name, user?.username)
-                    : chat.name}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          ) : (
-            <button
-              key={chat.id}
-              className={cn(
-                buttonVariants({ variant: chat.variant, size: 'lg' }),
-                chat.variant === 'secondary' &&
-                  'dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white shrink',
-                'justify-start gap-4 relative w-full'
-              )}
-              onClick={() => handleSelectConversation(chat)}
-            >
-              <Avatar className='flex justify-center items-center'>
-                <AvatarImage
-                  src={
-                    'https://static.minhtuanmobile.com/uploads/editer/images/truyen-cam-hung-voi-hinh-nen-chu-chuot-dau-bep-17.webp'
-                  }
-                  alt='avatar'
-                  className='w-10 h-10'
-                />
-                <AvatarFallback>
-                  <span className='sr-only'>
-                    {chat.is_group
-                      ? typeof chat.name === 'string'
-                        ? chat.name
-                        : 'Unnamed Group'
-                      : typeof chat.name === 'object'
-                      ? getOtherUserName(chat.name, user?.username)
-                      : chat.name}
-                  </span>
-                </AvatarFallback>
-              </Avatar>
-              <div className='flex flex-col max-w-28'>
-                <div className='flex items-center gap-2'>
-                  <span>
-                    {chat.is_group
-                      ? typeof chat.name === 'string'
-                        ? chat.name
-                        : 'Unnamed Group'
-                      : typeof chat.name === 'object'
-                      ? getOtherUserName(chat.name, user?.username)
-                      : chat.name}
-                  </span>
-                  {chat.is_group && <span className='bg-primary text-white text-xs rounded-full px-1'>Group</span>}
+                  </div>
+                  <div className='text-left text-xs mt-1'>{timeAgo(chat.last_message.created_at as string)}</div>
                 </div>
-              </div>
-            </button>
-          )
-        )}
-      </nav>
+              </button>
+            )
+          )}
+        </nav>
+      </ScrollArea>
     </div>
   )
 }

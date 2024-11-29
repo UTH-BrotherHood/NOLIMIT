@@ -1,5 +1,9 @@
 import http from '@/lib/http'
-import { ConversationResponseType } from '@/schemaValidations/conversation.schema'
+import {
+  ConversationResponseType,
+  CreateConversationBodyType,
+  CreateConversationResponseType
+} from '@/schemaValidations/conversation.schema'
 
 const conversationApiRequest = {
   getAllConversations: () =>
@@ -15,6 +19,18 @@ const conversationApiRequest = {
     }),
 
   getConversationById: (conversationId: string) =>
-    http.get<ConversationResponseType>(`/api/v1/conversation/${conversationId}`)
+    http.get<ConversationResponseType>(`/api/v1/conversation/${conversationId}`),
+
+  creatNewGroup: (body: CreateConversationBodyType) =>
+    http.post<CreateConversationResponseType>('api/conversation/newGroup', body, {
+      baseUrl: ''
+    }),
+
+  sCreatNewGroup: ({ body, access_token }: { body: CreateConversationBodyType; access_token: string }) =>
+    http.post<CreateConversationResponseType>('/api/v1/conversation/group', body, {
+      headers: {
+        Authorization: `Bearer ${access_token}`
+      }
+    })
 }
 export default conversationApiRequest

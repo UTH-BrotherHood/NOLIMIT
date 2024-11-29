@@ -6,9 +6,3 @@ export const useGetMeMutation = () => {
     mutationFn: accountApiRequest.me
   })
 }
-
-export const useGetAllConversationsMutation = () => {
-  return useMutation({
-    mutationFn: accountApiRequest.getAllConversations
-  })
-}

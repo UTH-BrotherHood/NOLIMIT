@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect, KeyboardEvent, useContext } from 'react'
+import { useDebounce } from 'use-debounce'
 import {
   Dialog,
   DialogContent,
@@ -10,56 +11,114 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { WithContext as ReactTags } from 'react-tag-input'
+import { X } from 'lucide-react'
+import { useSearchUserByEmailMutation } from '@/queries/useSearch'
+import { useCreatGroupChatMutation } from '@/queries/useConversation'
+import { toast } from '@/hooks/use-toast'
+import { UserContext } from '@/contexts/profileContext'
 
-const KeyCodes = {
-  comma: 188,
-  enter: 13
+interface Member {
+  id: string
+  email: string
 }
-
-const delimiters = [KeyCodes.comma, KeyCodes.enter]
 
 export function CreateGroupDialog() {
   const [groupName, setGroupName] = useState('')
-  const [tags, setTags] = useState<{ id: string; text: string }[]>([])
+  const [members, setMembers] = useState<Member[]>([])
+  const [email, setEmail] = useState('')
+  const [debouncedEmail] = useDebounce(email, 1500)
+  const [searchError, setSearchError] = useState('')
+  const userMutation = useSearchUserByEmailMutation()
+  const createGroup = useCreatGroupChatMutation()
+  const { user: currentUser } = useContext(UserContext) || {}
+  useEffect(() => {
+    if (debouncedEmail) {
+      handleSearch(debouncedEmail)
+    }
+  }, [debouncedEmail])
 
-  const handleDelete = (i: number) => {
-    setTags(tags.filter((tag, index) => index !== i))
+  const handleSearch = async (searchEmail: string) => {
+    try {
+      const response = await userMutation.mutateAsync(searchEmail)
+      if (!response.payload) {
+        throw new Error('Search failed')
+      }
+      if (response.payload && response.payload.data && response.payload.data.length > 0) {
+        const user = response.payload.data[0]
+        addMember({ id: user._id, email: user.email })
+        setEmail('')
+        setSearchError('')
+      } else {
+        setSearchError('Không tìm thấy người dùng với email này')
+      }
+    } catch (error) {
+      console.error('Lỗi khi tìm kiếm người dùng:', error)
+      setSearchError('Lỗi khi tìm kiếm người dùng')
+    }
   }
 
-  const handleAddition = (tag: { id: string; text: string }) => {
-    setTags([...tags, tag])
+  const addMember = (member: Member) => {
+    if (!members.some((m) => m.id === member.id)) {
+      setMembers([...members, member])
+    }
   }
 
-  const handleDrag = (tag: { id: string; text: string }, currPos: number, newPos: number) => {
-    const newTags = tags.slice()
-    newTags.splice(currPos, 1)
-    newTags.splice(newPos, 0, tag)
-    setTags(newTags)
+  const removeMember = (id: string) => {
+    setMembers(members.filter((member) => member.id !== id))
   }
 
-  const handleCreateGroup = () => {
-    console.log('Creating group:', groupName)
-    console.log(
-      'Members:',
-      tags.map((tag) => tag.text)
-    )
-    setGroupName('')
-    setTags([])
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      handleSearch(email)
+    }
+  }
+
+  const handleCreateGroup = async () => {
+    if (!groupName || members.length === 0) {
+      toast({
+        description: 'Please enter the group name and add at least one member'
+      })
+      return
+    }
+    try {
+      const body = JSON.stringify({
+        participants: [currentUser?._id, ...members.map((member) => member.id)],
+        conversation_name: groupName,
+        is_group: true
+      })
+      const response = await createGroup.mutateAsync(JSON.parse(body))
+
+      if (!response.status) {
+        toast({
+          description: 'Please enter the group name and add at least one member'
+        })
+      }
+
+      console.log('Nhóm đã được tạo:', response.payload.data)
+      toast({
+        description: 'Create conversation successfully'
+      })
+      setGroupName('')
+      setMembers([])
+    } catch (error) {
+      console.error('Lỗi khi tạo nhóm:', error)
+      toast({
+        description: 'Create conversation failed, try again.'
+      })
+    }
   }
 
   return (
     <DialogContent className='sm:max-w-[425px]'>
       <DialogHeader>
-        <DialogTitle>Create New Group</DialogTitle>
-        <DialogDescription>
-          Enter a name for your new group chat and add members by their email addresses.
-        </DialogDescription>
+        <DialogTitle>Tạo nhóm mới</DialogTitle>
+        <DialogDescription>Nhập tên cho nhóm chat mới và thêm thành viên bằng địa chỉ email của họ.</DialogDescription>
       </DialogHeader>
       <div className='grid gap-4 py-4'>
         <div className='grid grid-cols-4 items-center gap-4'>
           <Label htmlFor='group-name' className='text-right'>
-            Group Name
+            Tên nhóm
           </Label>
           <Input
             id='group-name'
@@ -70,116 +129,36 @@ export function CreateGroupDialog() {
         </div>
         <div className='grid grid-cols-4 items-center gap-4'>
           <Label htmlFor='members' className='text-right'>
-            Members
+            Thành viên
           </Label>
           <div className='col-span-3'>
-            <ReactTags
-              tags={tags.map((tag) => ({ ...tag, className: '' }))}
-              delimiters={delimiters}
-              handleDelete={handleDelete as (tag: any) => void}
-              handleAddition={handleAddition as (tag: any) => void}
-              handleDrag={handleDrag as (tag: any, currPos: number, newPos: number) => void}
-              inputFieldPosition='bottom'
-              autocomplete
-              placeholder='Add member emails'
-              classNames={{
-                tags: 'w-full',
-                tagInput: 'w-full',
-                tagInputField:
-                  'w-full mt-1 px-3 py-2 bg-background text-foreground border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring',
-                suggestions: 'absolute w-full bg-background border border-input rounded-md mt-1 z-10',
-                activeSuggestion: 'bg-accent p-2 cursor-pointer',
-                editTagInput: 'w-full',
-                editTagInputField: 'w-full',
-                clearAll: 'hidden',
-                selected: 'flex flex-wrap gap-2 mt-2',
-                tag: 'bg-primary text-primary-foreground text-sm rounded px-2 py-1 flex items-center',
-                remove: 'ml-2 text-primary-foreground cursor-pointer'
-              }}
+            <Input
+              type='email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder='Enter email of member'
+              className='mb-2'
             />
+            {searchError && <p className='text-red-500 text-sm'>{searchError}</p>}
+            <div className='flex flex-wrap gap-2 mt-2'>
+              {members.map((member) => (
+                <div
+                  key={member.id}
+                  className='bg-primary text-primary-foreground text-sm rounded px-2 py-1 flex items-center'
+                >
+                  {member.email}
+                  <button onClick={() => removeMember(member.id)} className='ml-2 text-primary-foreground'>
+                    <X size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
       <DialogFooter>
-        <Button onClick={handleCreateGroup}>Create Group</Button>
-      </DialogFooter>
-    </DialogContent>
-  )
-}
-
-export function SearchUserDialog() {
-  const [email, setEmail] = useState('')
-
-  const handleSearchUser = () => {
-    console.log('Searching user:', email)
-    setEmail('')
-  }
-
-  return (
-    <DialogContent className='sm:max-w-[425px]'>
-      <DialogHeader>
-        <DialogTitle>Search User</DialogTitle>
-        <DialogDescription>Enter an email address to find a user.</DialogDescription>
-      </DialogHeader>
-      <div className='grid gap-4 py-4'>
-        <div className='grid grid-cols-4 items-center gap-4'>
-          <Label htmlFor='email' className='text-right'>
-            Email
-          </Label>
-          <Input
-            id='email'
-            type='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className='col-span-3'
-          />
-        </div>
-      </div>
-      <DialogFooter>
-        <Button onClick={handleSearchUser}>Search</Button>
-      </DialogFooter>
-    </DialogContent>
-  )
-}
-
-export function SendMessageDialog() {
-  const [email, setEmail] = useState('')
-  const [message, setMessage] = useState('')
-
-  const handleSendMessage = () => {
-    console.log('Sending message to:', email, 'Message:', message)
-    setEmail('')
-    setMessage('')
-  }
-
-  return (
-    <DialogContent className='sm:max-w-[425px]'>
-      <DialogHeader>
-        <DialogTitle>Send Message</DialogTitle>
-        <DialogDescription>Send a message to a user by their email address.</DialogDescription>
-      </DialogHeader>
-      <div className='grid gap-4 py-4'>
-        <div className='grid grid-cols-4 items-center gap-4'>
-          <Label htmlFor='recipient-email' className='text-right'>
-            Recipient Email
-          </Label>
-          <Input
-            id='recipient-email'
-            type='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className='col-span-3'
-          />
-        </div>
-        <div className='grid grid-cols-4 items-center gap-4'>
-          <Label htmlFor='message' className='text-right'>
-            Message
-          </Label>
-          <Input id='message' value={message} onChange={(e) => setMessage(e.target.value)} className='col-span-3' />
-        </div>
-      </div>
-      <DialogFooter>
-        <Button onClick={handleSendMessage}>Send Message</Button>
+        <Button onClick={handleCreateGroup}>Tạo nhóm</Button>
       </DialogFooter>
     </DialogContent>
   )
