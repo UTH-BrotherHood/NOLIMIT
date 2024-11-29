@@ -12,30 +12,12 @@ interface ChatTopbarProps {
 }
 
 const TopbarIcons = [{ icon: Phone }, { icon: Video }, { icon: Info }]
-
-const getOtherUserName = (conversationName: Record<string, string>, currentName: string | undefined): string => {
-  if (!currentName) return 'Unknown User'
-
-  // Lọc ra người dùng khác bằng cách so sánh với currentName
-  const otherUser = Object.entries(conversationName).find(([name]) => name !== currentName)
-
-  return otherUser ? otherUser[1] : 'Unknown User' // Lấy tên của người dùng khác
-}
-
 export default function ChatTopbar({ selectedUser }: ChatTopbarProps) {
-  const { user } = useContext(UserContext) || {}
-
-  const displayName = selectedUser.is_group
-    ? selectedUser.conversation_name // If it's a group, display the group name
-    : typeof selectedUser.conversation_name === 'object'
-    ? getOtherUserName(selectedUser.conversation_name, user?.username) // If not a group, find the other user's name
-    : 'Unknown User' // Fallback for unexpected cases
-
   return (
     <ExpandableChatHeader>
       <div className='flex items-center gap-2'>
         <div className='flex flex-col'>
-          <span className='font-medium'>{String(displayName)}</span>
+          <span className='font-medium'>{selectedUser.conversation_name}</span>
         </div>
       </div>
 
